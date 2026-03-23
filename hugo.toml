@@ -1,6 +1,6 @@
 baseURL = 'https://yinbit.github.io/'
 locale = 'en-us'
-title = 'My New Hugo Project'
+title = 'yinbit'blog'
 theme = "PaperMod"
 
 
