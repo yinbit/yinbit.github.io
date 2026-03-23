@@ -23,7 +23,11 @@ theme = "PaperMod"
   name = "archive"
   url = "/archives/"
   weight = 10
-
+[[menu.main]]
+  identifier = "search"
+  name = "search"
+  url = "/search/"
+  weight = 40
 [[menu.main]]
   identifier = "tags"
   name = "tags"
