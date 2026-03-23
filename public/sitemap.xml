@@ -2,17 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/posts/first-post/</loc>
+    <loc>https://yinbit.github.io/categories/</loc>
     <lastmod>2026-03-23T18:20:58+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://yinbit.github.io/posts/first-post/</loc>
     <lastmod>2026-03-23T18:20:58+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://yinbit.github.io/tags/hugo/</loc>
     <lastmod>2026-03-23T18:20:58+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://yinbit.github.io/posts/</loc>
+    <lastmod>2026-03-23T18:20:58+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://yinbit.github.io/tags/</loc>
+    <lastmod>2026-03-23T18:20:58+08:00</lastmod>
+  </url><url>
+    <loc>https://yinbit.github.io/</loc>
+    <lastmod>2026-03-23T18:20:58+08:00</lastmod>
+  </url><url>
+    <loc>https://yinbit.github.io/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2026-03-23T18:20:58+08:00</lastmod>
+  </url><url>
+    <loc>https://yinbit.github.io/tags/%E6%95%99%E7%A8%8B/</loc>
+    <lastmod>2026-03-23T18:20:58+08:00</lastmod>
+  </url><url>
+    <loc>https://yinbit.github.io/tags/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/</loc>
+    <lastmod>2026-03-23T18:20:58+08:00</lastmod>
+  </url><url>
+    <loc>https://yinbit.github.io/about/</loc>
+    <lastmod>2026-03-23T10:00:00+08:00</lastmod>
   </url>
 </urlset>
