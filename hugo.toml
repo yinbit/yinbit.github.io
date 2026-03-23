@@ -9,7 +9,7 @@ theme = "PaperMod"
   ShowReadingTime = true
   ShowShareButtons = true
   ShowPostNavLinks = true
-[[menu.main]]
+[menu.main]
   identifier = "home"          # 唯一标识符，可用于多语言链接
   name = "🏠 首页"            # 显示在菜单上的名称
   url = "/"                   # 链接到的URL
