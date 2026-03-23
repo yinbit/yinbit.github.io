@@ -1,0 +1,11 @@
+baseURL = 'https://example.org/'
+locale = 'en-us'
+title = 'My New Hugo Project'
+theme = "PaperMod"
+
+
+[params]
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
