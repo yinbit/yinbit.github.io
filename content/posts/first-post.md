@@ -3,8 +3,7 @@ date = '2026-03-23T18:20:58+08:00'
 draft = false
 title = 'First Post'
 tags = ["Hugo", "教程", "静态网站"] 
-layout = "archives"
-categories = ["技术"]               
+layout = "archives"              
 +++
 ## 欢迎
 
