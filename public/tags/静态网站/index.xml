@@ -2,25 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>静态网站 on yinbitのblog</title>
-    <link>https://yinbit.github.io/tags/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/</link>
+    <link>http://localhost:1313/tags/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/</link>
     <description>Recent content in 静态网站 on yinbitのblog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 23 Mar 2026 18:20:58 +0800</lastBuildDate>
-    <atom:link href="https://yinbit.github.io/tags/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>First Post</title>
-      <link>https://yinbit.github.io/posts/first-post/</link>
-      <pubDate>Mon, 23 Mar 2026 18:20:58 +0800</pubDate>
-      <guid>https://yinbit.github.io/posts/first-post/</guid>
-      <description>&lt;h2 id=&#34;欢迎&#34;&gt;欢迎&lt;/h2&gt;
-&lt;p&gt;这是我的第一篇 Hugo 博客文章！&lt;/p&gt;
-&lt;h3 id=&#34;功能测试&#34;&gt;功能测试&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;支持 Markdown&lt;/li&gt;
-&lt;li&gt;代码高亮&lt;/li&gt;
-&lt;li&gt;图片插入&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
+    <atom:link href="http://localhost:1313/tags/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
