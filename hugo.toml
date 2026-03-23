@@ -14,3 +14,22 @@ theme = "PaperMod"
   name = "🏠 首页"            # 显示在菜单上的名称
   url = "/"                   # 链接到的URL
   weight = 10                 # 排序权重，数字越小越靠前/靠左
+  
+[menu.main]
+  identifier = "posts"
+  pre = "<i class='fa fa-book'></i>"  # 在名称前添加的HTML
+  name = "文章"               # 如果使用多语言i18n，可设为 `name = "i18n_postsKey"`
+  url = "/posts/"             # 指向文章列表页
+  weight = 20
+
+[menu.main]
+  identifier = "tags"
+  name = "标签"
+  url = "/tags/"
+  weight = 30
+
+[menu.main]
+  identifier = "about"
+  name = "关于"
+  url = "/about/"
+  weight = 100
