@@ -32,7 +32,13 @@ theme = "PaperMod"
   name = "标签"
   url = "/tags/"
   weight = 30
-
+  
+[[menu.main]]
+  identifier = "all-categories"
+  name = "分类"
+  url = "/categories/"  # 这是 Hugo 为所有分类自动生成的列表页
+  weight = 40
+  
 [[menu.main]]
   identifier = "about"
   name = "关于"
