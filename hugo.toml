@@ -1,6 +1,6 @@
 baseURL = 'https://yinbit.github.io/'
 locale = 'en-us'
-title = 'yinbit'blog'
+title = 'yinbitのblog'
 theme = "PaperMod"
 
 
