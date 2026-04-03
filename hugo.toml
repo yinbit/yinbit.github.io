@@ -11,6 +11,7 @@ theme = "PaperMod"
   ShowPostNavLinks = true
   ShowSearch = true
   SearchEngine = "fuse"
+  ShowToc = true
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]  
