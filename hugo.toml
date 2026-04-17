@@ -11,6 +11,9 @@ defaultContentLanguage = "zh-cn"
   ShowSearch = true
   SearchEngine = "fuse"
   ShowToc = true
+[params.cover]
+  hidden = true
+
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
