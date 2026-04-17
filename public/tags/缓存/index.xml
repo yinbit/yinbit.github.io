@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>缓存 on yinbitのblog</title>
-    <link>https://yinbit.github.io/tags/%E7%BC%93%E5%AD%98/</link>
+    <link>http://localhost:1313/tags/%E7%BC%93%E5%AD%98/</link>
     <description>Recent content in 缓存 on yinbitのblog</description>
     <generator>Hugo</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 03 Apr 2026 00:00:00 +0800</lastBuildDate>
-    <atom:link href="https://yinbit.github.io/tags/%E7%BC%93%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/%E7%BC%93%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Redis &#43; Spring Boot 最佳实践完整教程</title>
-      <link>https://yinbit.github.io/posts/redis-springboot-best-practices/</link>
+      <link>http://localhost:1313/posts/redis-springboot-best-practices/</link>
       <pubDate>Fri, 03 Apr 2026 00:00:00 +0800</pubDate>
-      <guid>https://yinbit.github.io/posts/redis-springboot-best-practices/</guid>
+      <guid>http://localhost:1313/posts/redis-springboot-best-practices/</guid>
       <description>&lt;h2 id=&#34;redis--spring-boot-最佳实践完整教程&#34;&gt;Redis + Spring Boot 最佳实践完整教程&lt;/h2&gt;
 &lt;p&gt;Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis + Spring Boot 的最佳实践。&lt;/p&gt;
 &lt;h2 id=&#34;项目搭建与基础配置&#34;&gt;项目搭建与基础配置&lt;/h2&gt;

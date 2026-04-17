@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(hugo version *)",
+      "Bash(hugo check *)"
+    ]
+  }
+}
