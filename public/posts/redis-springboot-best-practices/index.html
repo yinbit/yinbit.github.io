@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Redis &#43; Spring Boot 最佳实践完整教程 | yinbitのblog</title>
+<meta name="keywords" content="Redis, Spring Boot, 缓存, 消息队列, 分布式锁">
+<meta name="description" content="Redis &#43; Spring Boot 最佳实践完整教程
+Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis &#43; Spring Boot 的最佳实践。
+项目搭建与基础配置
+1. 依赖配置
+首先在 pom.xml 中添加必要的依赖：
+&lt;!-- Spring Boot Data Redis Starter --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Spring Boot Cache Starter (可选，用于声明式缓存) --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Lombok (可选，简化代码) --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;optional&gt;true&lt;/optional&gt;
+&lt;/dependency&gt;
+2. 应用配置
+在 application.yml 中配置 Redis 连接信息：
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 20
+          max-wait: -1
+          max-idle: 10
+          min-idle: 5
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000  # 10分钟
+      cache-null-values: false
+      key-prefix: &#34;cache:&#34;
+      use-key-prefix: true
+3. RedisTemplate 配置
+配置 RedisTemplate 的序列化方式是关键，推荐使用 Jackson 序列化：">
+<meta name="author" content="">
+<link rel="canonical" href="https://yinbit.github.io/posts/redis-springboot-best-practices/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://yinbit.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://yinbit.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yinbit.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://yinbit.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://yinbit.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh-cn" href="https://yinbit.github.io/posts/redis-springboot-best-practices/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://yinbit.github.io/posts/redis-springboot-best-practices/">
+  <meta property="og:site_name" content="yinbitのblog">
+  <meta property="og:title" content="Redis &#43; Spring Boot 最佳实践完整教程">
+  <meta property="og:description" content="Redis &#43; Spring Boot 最佳实践完整教程 Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis &#43; Spring Boot 的最佳实践。
+项目搭建与基础配置 1. 依赖配置 首先在 pom.xml 中添加必要的依赖：
+&lt;!-- Spring Boot Data Redis Starter --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!-- Spring Boot Cache Starter (可选，用于声明式缓存) --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!-- Lombok (可选，简化代码) --&gt; &lt;dependency&gt; &lt;groupId&gt;org.projectlombok&lt;/groupId&gt; &lt;artifactId&gt;lombok&lt;/artifactId&gt; &lt;optional&gt;true&lt;/optional&gt; &lt;/dependency&gt; 2. 应用配置 在 application.yml 中配置 Redis 连接信息：
+spring: data: redis: host: localhost port: 6379 database: 0 timeout: 3000 lettuce: pool: max-active: 20 max-wait: -1 max-idle: 10 min-idle: 5 cache: type: redis redis: time-to-live: 600000 # 10分钟 cache-null-values: false key-prefix: &#34;cache:&#34; use-key-prefix: true 3. RedisTemplate 配置 配置 RedisTemplate 的序列化方式是关键，推荐使用 Jackson 序列化：">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-03T00:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-03T00:00:00+08:00">
+    <meta property="article:tag" content="Redis">
+    <meta property="article:tag" content="Spring Boot">
+    <meta property="article:tag" content="缓存">
+    <meta property="article:tag" content="消息队列">
+    <meta property="article:tag" content="分布式锁">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Redis &#43; Spring Boot 最佳实践完整教程">
+  <meta name="twitter:description" content="Redis &#43; Spring Boot 最佳实践完整教程 Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis &#43; Spring Boot 的最佳实践。
+项目搭建与基础配置 1. 依赖配置 首先在 pom.xml 中添加必要的依赖：
+&lt;!-- Spring Boot Data Redis Starter --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!-- Spring Boot Cache Starter (可选，用于声明式缓存) --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!-- Lombok (可选，简化代码) --&gt; &lt;dependency&gt; &lt;groupId&gt;org.projectlombok&lt;/groupId&gt; &lt;artifactId&gt;lombok&lt;/artifactId&gt; &lt;optional&gt;true&lt;/optional&gt; &lt;/dependency&gt; 2. 应用配置 在 application.yml 中配置 Redis 连接信息：
+spring: data: redis: host: localhost port: 6379 database: 0 timeout: 3000 lettuce: pool: max-active: 20 max-wait: -1 max-idle: 10 min-idle: 5 cache: type: redis redis: time-to-live: 600000 # 10分钟 cache-null-values: false key-prefix: &#34;cache:&#34; use-key-prefix: true 3. RedisTemplate 配置 配置 RedisTemplate 的序列化方式是关键，推荐使用 Jackson 序列化：">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://yinbit.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Redis + Spring Boot 最佳实践完整教程",
+      "item": "https://yinbit.github.io/posts/redis-springboot-best-practices/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Redis + Spring Boot 最佳实践完整教程",
+  "name": "Redis \u002b Spring Boot 最佳实践完整教程",
+  "description": "Redis + Spring Boot 最佳实践完整教程 Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis + Spring Boot 的最佳实践。\n项目搭建与基础配置 1. 依赖配置 首先在 pom.xml 中添加必要的依赖：\n\u0026lt;!-- Spring Boot Data Redis Starter --\u0026gt; \u0026lt;dependency\u0026gt; \u0026lt;groupId\u0026gt;org.springframework.boot\u0026lt;/groupId\u0026gt; \u0026lt;artifactId\u0026gt;spring-boot-starter-data-redis\u0026lt;/artifactId\u0026gt; \u0026lt;/dependency\u0026gt; \u0026lt;!-- Spring Boot Cache Starter (可选，用于声明式缓存) --\u0026gt; \u0026lt;dependency\u0026gt; \u0026lt;groupId\u0026gt;org.springframework.boot\u0026lt;/groupId\u0026gt; \u0026lt;artifactId\u0026gt;spring-boot-starter-cache\u0026lt;/artifactId\u0026gt; \u0026lt;/dependency\u0026gt; \u0026lt;!-- Lombok (可选，简化代码) --\u0026gt; \u0026lt;dependency\u0026gt; \u0026lt;groupId\u0026gt;org.projectlombok\u0026lt;/groupId\u0026gt; \u0026lt;artifactId\u0026gt;lombok\u0026lt;/artifactId\u0026gt; \u0026lt;optional\u0026gt;true\u0026lt;/optional\u0026gt; \u0026lt;/dependency\u0026gt; 2. 应用配置 在 application.yml 中配置 Redis 连接信息：\nspring: data: redis: host: localhost port: 6379 database: 0 timeout: 3000 lettuce: pool: max-active: 20 max-wait: -1 max-idle: 10 min-idle: 5 cache: type: redis redis: time-to-live: 600000 # 10分钟 cache-null-values: false key-prefix: \u0026#34;cache:\u0026#34; use-key-prefix: true 3. RedisTemplate 配置 配置 RedisTemplate 的序列化方式是关键，推荐使用 Jackson 序列化：\n",
+  "keywords": [
+    "Redis", "Spring Boot", "缓存", "消息队列", "分布式锁"
+  ],
+  "articleBody": "Redis + Spring Boot 最佳实践完整教程 Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis + Spring Boot 的最佳实践。\n项目搭建与基础配置 1. 依赖配置 首先在 pom.xml 中添加必要的依赖：\norg.springframework.boot spring-boot-starter-data-redis org.springframework.boot spring-boot-starter-cache org.projectlombok lombok true 2. 应用配置 在 application.yml 中配置 Redis 连接信息：\nspring: data: redis: host: localhost port: 6379 database: 0 timeout: 3000 lettuce: pool: max-active: 20 max-wait: -1 max-idle: 10 min-idle: 5 cache: type: redis redis: time-to-live: 600000 # 10分钟 cache-null-values: false key-prefix: \"cache:\" use-key-prefix: true 3. RedisTemplate 配置 配置 RedisTemplate 的序列化方式是关键，推荐使用 Jackson 序列化：\n@Configuration public class RedisConfig { @Bean public RedisTemplate\u003cString, Object\u003e redisTemplate(RedisConnectionFactory connectionFactory) { RedisTemplate\u003cString, Object\u003e template = new RedisTemplate\u003c\u003e(); template.setConnectionFactory(connectionFactory); // 使用 Jackson2JsonRedisSerializer 序列化 value Jackson2JsonRedisSerializer\u003cObject\u003e serializer = new Jackson2JsonRedisSerializer\u003c\u003e(Object.class); ObjectMapper mapper = new ObjectMapper(); mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY); mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL); serializer.setObjectMapper(mapper); // Key 使用 String 序列化 template.setKeySerializer(new StringRedisSerializer()); template.setHashKeySerializer(new StringRedisSerializer()); // Value 使用 JSON 序列化 template.setValueSerializer(serializer); template.setHashValueSerializer(serializer); template.afterPropertiesSet(); return template; } } Redis 数据结构操作 1. 字符串 (String) @Service public class RedisStringService { @Autowired private RedisTemplate\u003cString, Object\u003e redisTemplate; // 设置键值对 public void set(String key, Object value) { redisTemplate.opsForValue().set(key, value); } // 设置带过期时间的键值对 public void set(String key, Object value, long timeout, TimeUnit unit) { redisTemplate.opsForValue().set(key, value, timeout, unit); } // 获取值 public Object get(String key) { return redisTemplate.opsForValue().get(key); } // 原子递增 public Long increment(String key) { return redisTemplate.opsForValue().increment(key); } // 如果不存在则设置 public Boolean setIfAbsent(String key, Object value) { return redisTemplate.opsForValue().setIfAbsent(key, value); } } 2. 列表 (List) @Service public class RedisListService { @Autowired private RedisTemplate\u003cString, Object\u003e redisTemplate; // 从左边推入 public Long leftPush(String key, Object value) { return redisTemplate.opsForList().leftPush(key, value); } // 从右边推入 public Long rightPush(String key, Object value) { return redisTemplate.opsForList().rightPush(key, value); } // 从左边弹出 public Object leftPop(String key) { return redisTemplate.opsForList().leftPop(key); } // 获取列表范围 public List\u003cObject\u003e range(String key, long start, long end) { return redisTemplate.opsForList().range(key, start, end); } } 3. 哈希 (Hash) @Service public class RedisHashService { @Autowired private RedisTemplate\u003cString, Object\u003e redisTemplate; // 设置哈希字段 public void put(String key, String field, Object value) { redisTemplate.opsForHash().put(key, field, value); } // 获取哈希字段 public Object get(String key, String field) { return redisTemplate.opsForHash().get(key, field); } // 获取所有哈希字段 public Map\u003cObject, Object\u003e entries(String key) { return redisTemplate.opsForHash().entries(key); } } 4. 集合 (Set) @Service public class RedisSetService { @Autowired private RedisTemplate\u003cString, Object\u003e redisTemplate; // 添加元素 public Long add(String key, Object... values) { return redisTemplate.opsForSet().add(key, values); } // 获取所有成员 public Set\u003cObject\u003e members(String key) { return redisTemplate.opsForSet().members(key); } // 判断成员是否存在 public Boolean isMember(String key, Object value) { return redisTemplate.opsForSet().isMember(key, value); } } Spring Cache 声明式缓存 1. 启用缓存 @Configuration @EnableCaching public class CacheConfig { @Bean public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) { RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig() .entryTtl(Duration.ofMinutes(10)) .disableCachingNullValues() .serializeKeysWith(RedisSerializationContext.SerializationPair .fromSerializer(new StringRedisSerializer())) .serializeValuesWith(RedisSerializationContext.SerializationPair .fromSerializer(new Jackson2JsonRedisSerializer\u003c\u003e(Object.class))); return RedisCacheManager.builder(connectionFactory) .cacheDefaults(defaultConfig) .transactionAware() .build(); } } 2. 使用缓存注解 @Service public class UserService { // 查询结果缓存 @Cacheable(value = \"users\", key = \"#id\", unless = \"#result == null\") public User getUserById(Long id) { System.out.println(\"从数据库查询用户: \" + id); User user = new User(); user.setId(id); user.setName(\"用户\" + id); return user; } // 更新缓存 @CachePut(value = \"users\", key = \"#user.id\") public User updateUser(User user) { System.out.println(\"更新用户: \" + user.getId()); return user; } // 清除缓存 @CacheEvict(value = \"users\", key = \"#id\") public void deleteUser(Long id) { System.out.println(\"删除用户: \" + id); } } Redis 消息队列 Redis 提供了三种实现消息队列的方式，各有优劣：\n1. List：简单队列 @Component public class ListQueueProducer { @Autowired private RedisTemplate\u003cString, String\u003e redisTemplate; public void send(String message) { redisTemplate.opsForList().leftPush(\"order_queue\", message); } } @Component public class ListQueueConsumer { @Autowired private RedisTemplate\u003cString, String\u003e redisTemplate; @Scheduled(fixedDelay = 500) public void receive() { String message = redisTemplate.opsForList().rightPop(\"order_queue\"); if (message != null) { System.out.println(\"收到消息：\" + message); } } } 2. Pub/Sub：广播模式 @Component public class PubSubProducer { @Autowired private RedisTemplate\u003cString, String\u003e redisTemplate; public void send(String message) { redisTemplate.convertAndSend(\"order_channel\", message); } } @Component public class PubSubConsumer { @RedisListener(channels = \"order_channel\") public void receive(String message) { System.out.println(\"收到消息：\" + message); } } 3. Stream：可靠消息队列（推荐） @Component public class StreamProducer { @Autowired private RedisTemplate\u003cString, String\u003e redisTemplate; public String send(Map\u003cString, String\u003e fields) { return redisTemplate.opsForStream().add(\"order_stream\", fields); } } @Component public class StreamConsumer { @Autowired private RedisTemplate\u003cString, String\u003e redisTemplate; @PostConstruct public void init() { try { redisTemplate.opsForStream().createGroup(\"order_stream\", \"group1\", StreamOffset.fromStart()); } catch (Exception e) { // 消费组已存在 } } @Scheduled(fixedDelay = 500) public void consume() { List\u003cStreamMessage\u003cString, String\u003e\u003e messages = redisTemplate.opsForStream().read( Consumer.from(\"group1\", \"consumer1\"), StreamReadOptions.empty().count(10), StreamOffset.create(\"order_stream\", StreamOffset.FromStart.START) ); if (messages != null \u0026\u0026 !messages.isEmpty()) { for (StreamMessage\u003cString, String\u003e message : messages) { Map\u003cString, String\u003e fields = message.getValue(); String messageId = message.getId(); System.out.println(\"收到消息：\" + fields); // 确认消息 redisTemplate.opsForStream().acknowledge(\"order_stream\", \"group1\", messageId); } } } } 分布式锁 使用 Redis 实现分布式锁是常见的应用场景：\n@Service public class RedisLockService { @Autowired private RedisTemplate\u003cString, Object\u003e redisTemplate; private static final String LOCK_PREFIX = \"lock:\"; private static final long DEFAULT_EXPIRE_TIME = 30; // 30秒 /** * 尝试获取锁 */ public boolean tryLock(String lockKey, String requestId) { Boolean success = redisTemplate.opsForValue().setIfAbsent( LOCK_PREFIX + lockKey, requestId, DEFAULT_EXPIRE_TIME, TimeUnit.SECONDS ); return success != null \u0026\u0026 success; } /** * 释放锁（使用 Lua 脚本保证原子性） */ public boolean releaseLock(String lockKey, String requestId) { String script = \"if redis.call('get', KEYS[1]) == ARGV[1] then \" + \"return redis.call('del', KEYS[1]) \" + \"else \" + \"return 0 \" + \"end\"; DefaultRedisScript\u003cLong\u003e redisScript = new DefaultRedisScript\u003c\u003e(); redisScript.setScriptText(script); redisScript.setResultType(Long.class); Long result = redisTemplate.execute(redisScript, Collections.singletonList(LOCK_PREFIX + lockKey), requestId); return result != null \u0026\u0026 result == 1; } } 最佳实践与注意事项 1. 序列化选择 Key: 使用 StringRedisSerializer，便于调试和查看 Value: 使用 Jackson2JsonRedisSerializer，支持复杂对象 2. 连接池配置 根据实际并发量调整连接池大小 生产环境务必使用连接池，避免频繁创建连接 3. 缓存策略 合理设置过期时间，避免缓存雪崩 使用缓存预热提高系统性能 注意缓存穿透和缓存击穿问题 4. 性能优化 使用 Pipeline 批量操作，减少网络往返 合理使用批量操作 API 避免大 Key 和热 Key 问题 5. 监控与运维 监控 Redis 内存使用情况 定期清理过期 Key 使用 Redis Sentinel 或 Cluster 保证高可用 6. 消息队列选型建议 场景 推荐方案 说明 简单异步任务 List 实现简单，但有消息丢失风险 实时广播 Pub/Sub 不支持持久化，适合对可靠性要求不高的场景 可靠消息、复杂业务 Stream 支持持久化、ACK、消费组，生产环境首选 总结 Spring Boot + Redis 的整合是现代后端开发的必备技能。通过本文的学习，你应该掌握了：\n基础配置: 依赖、连接、序列化配置 数据结构: String、List、Hash、Set 的使用 声明式缓存: Spring Cache 注解的应用 消息队列: 三种实现方式及选型建议 分布式锁: Redis 分布式锁的实现 最佳实践: 生产环境的注意事项 Redis 功能强大且易于使用，配合 Spring Boot 的自动配置，可以大大提高开发效率。希望这篇教程能帮助你在项目中更好地应用 Redis！\n",
+  "wordCount" : "936",
+  "inLanguage": "zh-cn",
+  "datePublished": "2026-04-03T00:00:00+08:00",
+  "dateModified": "2026-04-03T00:00:00+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://yinbit.github.io/posts/redis-springboot-best-practices/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "yinbitのblog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yinbit.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://yinbit.github.io/" accesskey="h" title="yinbitのblog (Alt + H)">yinbitのblog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://yinbit.github.io/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yinbit.github.io/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yinbit.github.io/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yinbit.github.io/about/" title="关于">
+                    <span>关于</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Redis &#43; Spring Boot 最佳实践完整教程
+    </h1>
+    <div class="post-meta"><span title='2026-04-03 00:00:00 +0800 CST'>April 3, 2026</span>&nbsp;·&nbsp;<span>5 min</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#redis--spring-boot-%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b" aria-label="Redis &#43; Spring Boot 最佳实践完整教程">Redis + Spring Boot 最佳实践完整教程</a></li>
+                <li>
+                    <a href="#%e9%a1%b9%e7%9b%ae%e6%90%ad%e5%bb%ba%e4%b8%8e%e5%9f%ba%e7%a1%80%e9%85%8d%e7%bd%ae" aria-label="项目搭建与基础配置">项目搭建与基础配置</a><ul>
+                        
+                <li>
+                    <a href="#1-%e4%be%9d%e8%b5%96%e9%85%8d%e7%bd%ae" aria-label="1. 依赖配置">1. 依赖配置</a></li>
+                <li>
+                    <a href="#2-%e5%ba%94%e7%94%a8%e9%85%8d%e7%bd%ae" aria-label="2. 应用配置">2. 应用配置</a></li>
+                <li>
+                    <a href="#3-redistemplate-%e9%85%8d%e7%bd%ae" aria-label="3. RedisTemplate 配置">3. RedisTemplate 配置</a></li></ul>
+                </li>
+                <li>
+                    <a href="#redis-%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e6%93%8d%e4%bd%9c" aria-label="Redis 数据结构操作">Redis 数据结构操作</a><ul>
+                        
+                <li>
+                    <a href="#1-%e5%ad%97%e7%ac%a6%e4%b8%b2-string" aria-label="1. 字符串 (String)">1. 字符串 (String)</a></li>
+                <li>
+                    <a href="#2-%e5%88%97%e8%a1%a8-list" aria-label="2. 列表 (List)">2. 列表 (List)</a></li>
+                <li>
+                    <a href="#3-%e5%93%88%e5%b8%8c-hash" aria-label="3. 哈希 (Hash)">3. 哈希 (Hash)</a></li>
+                <li>
+                    <a href="#4-%e9%9b%86%e5%90%88-set" aria-label="4. 集合 (Set)">4. 集合 (Set)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#spring-cache-%e5%a3%b0%e6%98%8e%e5%bc%8f%e7%bc%93%e5%ad%98" aria-label="Spring Cache 声明式缓存">Spring Cache 声明式缓存</a><ul>
+                        
+                <li>
+                    <a href="#1-%e5%90%af%e7%94%a8%e7%bc%93%e5%ad%98" aria-label="1. 启用缓存">1. 启用缓存</a></li>
+                <li>
+                    <a href="#2-%e4%bd%bf%e7%94%a8%e7%bc%93%e5%ad%98%e6%b3%a8%e8%a7%a3" aria-label="2. 使用缓存注解">2. 使用缓存注解</a></li></ul>
+                </li>
+                <li>
+                    <a href="#redis-%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" aria-label="Redis 消息队列">Redis 消息队列</a><ul>
+                        
+                <li>
+                    <a href="#1-list%e7%ae%80%e5%8d%95%e9%98%9f%e5%88%97" aria-label="1. List：简单队列">1. List：简单队列</a></li>
+                <li>
+                    <a href="#2-pubsub%e5%b9%bf%e6%92%ad%e6%a8%a1%e5%bc%8f" aria-label="2. Pub/Sub：广播模式">2. Pub/Sub：广播模式</a></li>
+                <li>
+                    <a href="#3-stream%e5%8f%af%e9%9d%a0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e6%8e%a8%e8%8d%90" aria-label="3. Stream：可靠消息队列（推荐）">3. Stream：可靠消息队列（推荐）</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81" aria-label="分布式锁">分布式锁</a></li>
+                <li>
+                    <a href="#%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e4%b8%8e%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" aria-label="最佳实践与注意事项">最佳实践与注意事项</a><ul>
+                        
+                <li>
+                    <a href="#1-%e5%ba%8f%e5%88%97%e5%8c%96%e9%80%89%e6%8b%a9" aria-label="1. 序列化选择">1. 序列化选择</a></li>
+                <li>
+                    <a href="#2-%e8%bf%9e%e6%8e%a5%e6%b1%a0%e9%85%8d%e7%bd%ae" aria-label="2. 连接池配置">2. 连接池配置</a></li>
+                <li>
+                    <a href="#3-%e7%bc%93%e5%ad%98%e7%ad%96%e7%95%a5" aria-label="3. 缓存策略">3. 缓存策略</a></li>
+                <li>
+                    <a href="#4-%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" aria-label="4. 性能优化">4. 性能优化</a></li>
+                <li>
+                    <a href="#5-%e7%9b%91%e6%8e%a7%e4%b8%8e%e8%bf%90%e7%bb%b4" aria-label="5. 监控与运维">5. 监控与运维</a></li>
+                <li>
+                    <a href="#6-%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e9%80%89%e5%9e%8b%e5%bb%ba%e8%ae%ae" aria-label="6. 消息队列选型建议">6. 消息队列选型建议</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="redis--spring-boot-最佳实践完整教程">Redis + Spring Boot 最佳实践完整教程<a hidden class="anchor" aria-hidden="true" href="#redis--spring-boot-最佳实践完整教程">#</a></h2>
+<p>Redis 作为一款高性能的内存数据库，在现代 Web 应用中扮演着越来越重要的角色。Spring Boot 则提供了强大的自动配置能力，让 Redis 的集成变得异常简单。本文将带你从零开始，全面掌握 Redis + Spring Boot 的最佳实践。</p>
+<h2 id="项目搭建与基础配置">项目搭建与基础配置<a hidden class="anchor" aria-hidden="true" href="#项目搭建与基础配置">#</a></h2>
+<h3 id="1-依赖配置">1. 依赖配置<a hidden class="anchor" aria-hidden="true" href="#1-依赖配置">#</a></h3>
+<p>首先在 <code>pom.xml</code> 中添加必要的依赖：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- Spring Boot Data Redis Starter --&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- Spring Boot Cache Starter (可选，用于声明式缓存) --&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-cache<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- Lombok (可选，简化代码) --&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.projectlombok<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>lombok<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;optional&gt;</span>true<span style="color:#f92672">&lt;/optional&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><h3 id="2-应用配置">2. 应用配置<a hidden class="anchor" aria-hidden="true" href="#2-应用配置">#</a></h3>
+<p>在 <code>application.yml</code> 中配置 Redis 连接信息：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">data</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">redis</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">host</span>: <span style="color:#ae81ff">localhost</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">port</span>: <span style="color:#ae81ff">6379</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">database</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">timeout</span>: <span style="color:#ae81ff">3000</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">lettuce</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">pool</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">max-active</span>: <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">max-wait</span>: -<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">max-idle</span>: <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">min-idle</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cache</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">redis</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">redis</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">time-to-live</span>: <span style="color:#ae81ff">600000</span>  <span style="color:#75715e"># 10分钟</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">cache-null-values</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">key-prefix</span>: <span style="color:#e6db74">&#34;cache:&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">use-key-prefix</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><h3 id="3-redistemplate-配置">3. RedisTemplate 配置<a hidden class="anchor" aria-hidden="true" href="#3-redistemplate-配置">#</a></h3>
+<p>配置 RedisTemplate 的序列化方式是关键，推荐使用 Jackson 序列化：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisConfig</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">redisTemplate</span>(RedisConnectionFactory connectionFactory) {
+</span></span><span style="display:flex;"><span>        RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> template <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RedisTemplate<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setConnectionFactory</span>(connectionFactory);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 使用 Jackson2JsonRedisSerializer 序列化 value</span>
+</span></span><span style="display:flex;"><span>        Jackson2JsonRedisSerializer<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> serializer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Jackson2JsonRedisSerializer<span style="color:#f92672">&lt;&gt;</span>(Object.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>        ObjectMapper mapper <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ObjectMapper();
+</span></span><span style="display:flex;"><span>        mapper.<span style="color:#a6e22e">setVisibility</span>(PropertyAccessor.<span style="color:#a6e22e">ALL</span>, JsonAutoDetect.<span style="color:#a6e22e">Visibility</span>.<span style="color:#a6e22e">ANY</span>);
+</span></span><span style="display:flex;"><span>        mapper.<span style="color:#a6e22e">activateDefaultTyping</span>(LaissezFaireSubTypeValidator.<span style="color:#a6e22e">instance</span>, 
+</span></span><span style="display:flex;"><span>                                    ObjectMapper.<span style="color:#a6e22e">DefaultTyping</span>.<span style="color:#a6e22e">NON_FINAL</span>);
+</span></span><span style="display:flex;"><span>        serializer.<span style="color:#a6e22e">setObjectMapper</span>(mapper);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Key 使用 String 序列化</span>
+</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setKeySerializer</span>(<span style="color:#66d9ef">new</span> StringRedisSerializer());
+</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setHashKeySerializer</span>(<span style="color:#66d9ef">new</span> StringRedisSerializer());
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Value 使用 JSON 序列化</span>
+</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setValueSerializer</span>(serializer);
+</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setHashValueSerializer</span>(serializer);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">afterPropertiesSet</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> template;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="redis-数据结构操作">Redis 数据结构操作<a hidden class="anchor" aria-hidden="true" href="#redis-数据结构操作">#</a></h2>
+<h3 id="1-字符串-string">1. 字符串 (String)<a hidden class="anchor" aria-hidden="true" href="#1-字符串-string">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisStringService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置键值对</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">set</span>(String key, Object value) {
+</span></span><span style="display:flex;"><span>        redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">set</span>(key, value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置带过期时间的键值对</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">set</span>(String key, Object value, <span style="color:#66d9ef">long</span> timeout, TimeUnit unit) {
+</span></span><span style="display:flex;"><span>        redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">set</span>(key, value, timeout, unit);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取值</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">get</span>(String key) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">get</span>(key);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 原子递增</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Long <span style="color:#a6e22e">increment</span>(String key) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">increment</span>(key);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 如果不存在则设置</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Boolean <span style="color:#a6e22e">setIfAbsent</span>(String key, Object value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">setIfAbsent</span>(key, value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="2-列表-list">2. 列表 (List)<a hidden class="anchor" aria-hidden="true" href="#2-列表-list">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisListService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 从左边推入</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Long <span style="color:#a6e22e">leftPush</span>(String key, Object value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForList</span>().<span style="color:#a6e22e">leftPush</span>(key, value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 从右边推入</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Long <span style="color:#a6e22e">rightPush</span>(String key, Object value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForList</span>().<span style="color:#a6e22e">rightPush</span>(key, value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 从左边弹出</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">leftPop</span>(String key) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForList</span>().<span style="color:#a6e22e">leftPop</span>(key);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取列表范围</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">range</span>(String key, <span style="color:#66d9ef">long</span> start, <span style="color:#66d9ef">long</span> end) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForList</span>().<span style="color:#a6e22e">range</span>(key, start, end);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="3-哈希-hash">3. 哈希 (Hash)<a hidden class="anchor" aria-hidden="true" href="#3-哈希-hash">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisHashService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 设置哈希字段</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">put</span>(String key, String field, Object value) {
+</span></span><span style="display:flex;"><span>        redisTemplate.<span style="color:#a6e22e">opsForHash</span>().<span style="color:#a6e22e">put</span>(key, field, value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取哈希字段</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">get</span>(String key, String field) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForHash</span>().<span style="color:#a6e22e">get</span>(key, field);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取所有哈希字段</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Map<span style="color:#f92672">&lt;</span>Object, Object<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">entries</span>(String key) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForHash</span>().<span style="color:#a6e22e">entries</span>(key);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="4-集合-set">4. 集合 (Set)<a hidden class="anchor" aria-hidden="true" href="#4-集合-set">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisSetService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 添加元素</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Long <span style="color:#a6e22e">add</span>(String key, Object... values) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForSet</span>().<span style="color:#a6e22e">add</span>(key, values);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取所有成员</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Set<span style="color:#f92672">&lt;</span>Object<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">members</span>(String key) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForSet</span>().<span style="color:#a6e22e">members</span>(key);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 判断成员是否存在</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Boolean <span style="color:#a6e22e">isMember</span>(String key, Object value) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForSet</span>().<span style="color:#a6e22e">isMember</span>(key, value);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="spring-cache-声明式缓存">Spring Cache 声明式缓存<a hidden class="anchor" aria-hidden="true" href="#spring-cache-声明式缓存">#</a></h2>
+<h3 id="1-启用缓存">1. 启用缓存<a hidden class="anchor" aria-hidden="true" href="#1-启用缓存">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableCaching</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CacheConfig</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> RedisCacheManager <span style="color:#a6e22e">cacheManager</span>(RedisConnectionFactory connectionFactory) {
+</span></span><span style="display:flex;"><span>        RedisCacheConfiguration defaultConfig <span style="color:#f92672">=</span> RedisCacheConfiguration.<span style="color:#a6e22e">defaultCacheConfig</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">entryTtl</span>(Duration.<span style="color:#a6e22e">ofMinutes</span>(10))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">disableCachingNullValues</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">serializeKeysWith</span>(RedisSerializationContext.<span style="color:#a6e22e">SerializationPair</span>
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">fromSerializer</span>(<span style="color:#66d9ef">new</span> StringRedisSerializer()))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">serializeValuesWith</span>(RedisSerializationContext.<span style="color:#a6e22e">SerializationPair</span>
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">fromSerializer</span>(<span style="color:#66d9ef">new</span> Jackson2JsonRedisSerializer<span style="color:#f92672">&lt;&gt;</span>(Object.<span style="color:#a6e22e">class</span>)));
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> RedisCacheManager.<span style="color:#a6e22e">builder</span>(connectionFactory)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">cacheDefaults</span>(defaultConfig)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">transactionAware</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="2-使用缓存注解">2. 使用缓存注解<a hidden class="anchor" aria-hidden="true" href="#2-使用缓存注解">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UserService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 查询结果缓存</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Cacheable</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;users&#34;</span>, key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#id&#34;</span>, unless <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#result == null&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">getUserById</span>(Long id) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;从数据库查询用户: &#34;</span> <span style="color:#f92672">+</span> id);
+</span></span><span style="display:flex;"><span>        User user <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> User();
+</span></span><span style="display:flex;"><span>        user.<span style="color:#a6e22e">setId</span>(id);
+</span></span><span style="display:flex;"><span>        user.<span style="color:#a6e22e">setName</span>(<span style="color:#e6db74">&#34;用户&#34;</span> <span style="color:#f92672">+</span> id);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> user;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 更新缓存</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@CachePut</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;users&#34;</span>, key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#user.id&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">updateUser</span>(User user) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;更新用户: &#34;</span> <span style="color:#f92672">+</span> user.<span style="color:#a6e22e">getId</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> user;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 清除缓存</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@CacheEvict</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;users&#34;</span>, key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#id&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">deleteUser</span>(Long id) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;删除用户: &#34;</span> <span style="color:#f92672">+</span> id);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="redis-消息队列">Redis 消息队列<a hidden class="anchor" aria-hidden="true" href="#redis-消息队列">#</a></h2>
+<p>Redis 提供了三种实现消息队列的方式，各有优劣：</p>
+<h3 id="1-list简单队列">1. List：简单队列<a hidden class="anchor" aria-hidden="true" href="#1-list简单队列">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ListQueueProducer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">send</span>(String message) {
+</span></span><span style="display:flex;"><span>        redisTemplate.<span style="color:#a6e22e">opsForList</span>().<span style="color:#a6e22e">leftPush</span>(<span style="color:#e6db74">&#34;order_queue&#34;</span>, message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ListQueueConsumer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Scheduled</span>(fixedDelay <span style="color:#f92672">=</span> 500)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">receive</span>() {
+</span></span><span style="display:flex;"><span>        String message <span style="color:#f92672">=</span> redisTemplate.<span style="color:#a6e22e">opsForList</span>().<span style="color:#a6e22e">rightPop</span>(<span style="color:#e6db74">&#34;order_queue&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (message <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;收到消息：&#34;</span> <span style="color:#f92672">+</span> message);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="2-pubsub广播模式">2. Pub/Sub：广播模式<a hidden class="anchor" aria-hidden="true" href="#2-pubsub广播模式">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PubSubProducer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">send</span>(String message) {
+</span></span><span style="display:flex;"><span>        redisTemplate.<span style="color:#a6e22e">convertAndSend</span>(<span style="color:#e6db74">&#34;order_channel&#34;</span>, message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PubSubConsumer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@RedisListener</span>(channels <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;order_channel&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">receive</span>(String message) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;收到消息：&#34;</span> <span style="color:#f92672">+</span> message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="3-stream可靠消息队列推荐">3. Stream：可靠消息队列（推荐）<a hidden class="anchor" aria-hidden="true" href="#3-stream可靠消息队列推荐">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StreamProducer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">send</span>(Map<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> fields) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> redisTemplate.<span style="color:#a6e22e">opsForStream</span>().<span style="color:#a6e22e">add</span>(<span style="color:#e6db74">&#34;order_stream&#34;</span>, fields);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StreamConsumer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@PostConstruct</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">init</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            redisTemplate.<span style="color:#a6e22e">opsForStream</span>().<span style="color:#a6e22e">createGroup</span>(<span style="color:#e6db74">&#34;order_stream&#34;</span>, <span style="color:#e6db74">&#34;group1&#34;</span>, StreamOffset.<span style="color:#a6e22e">fromStart</span>());
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 消费组已存在</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Scheduled</span>(fixedDelay <span style="color:#f92672">=</span> 500)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">consume</span>() {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>StreamMessage<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;&gt;</span> messages <span style="color:#f92672">=</span> redisTemplate.<span style="color:#a6e22e">opsForStream</span>().<span style="color:#a6e22e">read</span>(
+</span></span><span style="display:flex;"><span>            Consumer.<span style="color:#a6e22e">from</span>(<span style="color:#e6db74">&#34;group1&#34;</span>, <span style="color:#e6db74">&#34;consumer1&#34;</span>),
+</span></span><span style="display:flex;"><span>            StreamReadOptions.<span style="color:#a6e22e">empty</span>().<span style="color:#a6e22e">count</span>(10),
+</span></span><span style="display:flex;"><span>            StreamOffset.<span style="color:#a6e22e">create</span>(<span style="color:#e6db74">&#34;order_stream&#34;</span>, StreamOffset.<span style="color:#a6e22e">FromStart</span>.<span style="color:#a6e22e">START</span>)
+</span></span><span style="display:flex;"><span>        );
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (messages <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>messages.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (StreamMessage<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> message : messages) {
+</span></span><span style="display:flex;"><span>                Map<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> fields <span style="color:#f92672">=</span> message.<span style="color:#a6e22e">getValue</span>();
+</span></span><span style="display:flex;"><span>                String messageId <span style="color:#f92672">=</span> message.<span style="color:#a6e22e">getId</span>();
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;收到消息：&#34;</span> <span style="color:#f92672">+</span> fields);
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 确认消息</span>
+</span></span><span style="display:flex;"><span>                redisTemplate.<span style="color:#a6e22e">opsForStream</span>().<span style="color:#a6e22e">acknowledge</span>(<span style="color:#e6db74">&#34;order_stream&#34;</span>, <span style="color:#e6db74">&#34;group1&#34;</span>, messageId);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="分布式锁">分布式锁<a hidden class="anchor" aria-hidden="true" href="#分布式锁">#</a></h2>
+<p>使用 Redis 实现分布式锁是常见的应用场景：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisLockService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> redisTemplate;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String LOCK_PREFIX <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lock:&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> DEFAULT_EXPIRE_TIME <span style="color:#f92672">=</span> 30; <span style="color:#75715e">// 30秒</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 尝试获取锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryLock</span>(String lockKey, String requestId) {
+</span></span><span style="display:flex;"><span>        Boolean success <span style="color:#f92672">=</span> redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">setIfAbsent</span>(
+</span></span><span style="display:flex;"><span>            LOCK_PREFIX <span style="color:#f92672">+</span> lockKey, requestId, DEFAULT_EXPIRE_TIME, TimeUnit.<span style="color:#a6e22e">SECONDS</span>
+</span></span><span style="display:flex;"><span>        );
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> success <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> success;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * 释放锁（使用 Lua 脚本保证原子性）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">releaseLock</span>(String lockKey, String requestId) {
+</span></span><span style="display:flex;"><span>        String script <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;if redis.call(&#39;get&#39;, KEYS[1]) == ARGV[1] then &#34;</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                       <span style="color:#e6db74">&#34;return redis.call(&#39;del&#39;, KEYS[1]) &#34;</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                       <span style="color:#e6db74">&#34;else &#34;</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                       <span style="color:#e6db74">&#34;return 0 &#34;</span> <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                       <span style="color:#e6db74">&#34;end&#34;</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        DefaultRedisScript<span style="color:#f92672">&lt;</span>Long<span style="color:#f92672">&gt;</span> redisScript <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DefaultRedisScript<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        redisScript.<span style="color:#a6e22e">setScriptText</span>(script);
+</span></span><span style="display:flex;"><span>        redisScript.<span style="color:#a6e22e">setResultType</span>(Long.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Long result <span style="color:#f92672">=</span> redisTemplate.<span style="color:#a6e22e">execute</span>(redisScript, 
+</span></span><span style="display:flex;"><span>            Collections.<span style="color:#a6e22e">singletonList</span>(LOCK_PREFIX <span style="color:#f92672">+</span> lockKey), requestId);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> result <span style="color:#f92672">==</span> 1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="最佳实践与注意事项">最佳实践与注意事项<a hidden class="anchor" aria-hidden="true" href="#最佳实践与注意事项">#</a></h2>
+<h3 id="1-序列化选择">1. 序列化选择<a hidden class="anchor" aria-hidden="true" href="#1-序列化选择">#</a></h3>
+<ul>
+<li><strong>Key</strong>: 使用 <code>StringRedisSerializer</code>，便于调试和查看</li>
+<li><strong>Value</strong>: 使用 <code>Jackson2JsonRedisSerializer</code>，支持复杂对象</li>
+</ul>
+<h3 id="2-连接池配置">2. 连接池配置<a hidden class="anchor" aria-hidden="true" href="#2-连接池配置">#</a></h3>
+<ul>
+<li>根据实际并发量调整连接池大小</li>
+<li>生产环境务必使用连接池，避免频繁创建连接</li>
+</ul>
+<h3 id="3-缓存策略">3. 缓存策略<a hidden class="anchor" aria-hidden="true" href="#3-缓存策略">#</a></h3>
+<ul>
+<li>合理设置过期时间，避免缓存雪崩</li>
+<li>使用缓存预热提高系统性能</li>
+<li>注意缓存穿透和缓存击穿问题</li>
+</ul>
+<h3 id="4-性能优化">4. 性能优化<a hidden class="anchor" aria-hidden="true" href="#4-性能优化">#</a></h3>
+<ul>
+<li>使用 Pipeline 批量操作，减少网络往返</li>
+<li>合理使用批量操作 API</li>
+<li>避免大 Key 和热 Key 问题</li>
+</ul>
+<h3 id="5-监控与运维">5. 监控与运维<a hidden class="anchor" aria-hidden="true" href="#5-监控与运维">#</a></h3>
+<ul>
+<li>监控 Redis 内存使用情况</li>
+<li>定期清理过期 Key</li>
+<li>使用 Redis Sentinel 或 Cluster 保证高可用</li>
+</ul>
+<h3 id="6-消息队列选型建议">6. 消息队列选型建议<a hidden class="anchor" aria-hidden="true" href="#6-消息队列选型建议">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>推荐方案</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>简单异步任务</td>
+          <td>List</td>
+          <td>实现简单，但有消息丢失风险</td>
+      </tr>
+      <tr>
+          <td>实时广播</td>
+          <td>Pub/Sub</td>
+          <td>不支持持久化，适合对可靠性要求不高的场景</td>
+      </tr>
+      <tr>
+          <td>可靠消息、复杂业务</td>
+          <td><strong>Stream</strong></td>
+          <td>支持持久化、ACK、消费组，生产环境首选</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>Spring Boot + Redis 的整合是现代后端开发的必备技能。通过本文的学习，你应该掌握了：</p>
+<ol>
+<li><strong>基础配置</strong>: 依赖、连接、序列化配置</li>
+<li><strong>数据结构</strong>: String、List、Hash、Set 的使用</li>
+<li><strong>声明式缓存</strong>: Spring Cache 注解的应用</li>
+<li><strong>消息队列</strong>: 三种实现方式及选型建议</li>
+<li><strong>分布式锁</strong>: Redis 分布式锁的实现</li>
+<li><strong>最佳实践</strong>: 生产环境的注意事项</li>
+</ol>
+<p>Redis 功能强大且易于使用，配合 Spring Boot 的自动配置，可以大大提高开发效率。希望这篇教程能帮助你在项目中更好地应用 Redis！</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://yinbit.github.io/tags/redis/">Redis</a></li>
+      <li><a href="https://yinbit.github.io/tags/spring-boot/">Spring Boot</a></li>
+      <li><a href="https://yinbit.github.io/tags/%E7%BC%93%E5%AD%98/">缓存</a></li>
+      <li><a href="https://yinbit.github.io/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a></li>
+      <li><a href="https://yinbit.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">分布式锁</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://yinbit.github.io/posts/aitrend/">
+    <span class="title">« </span>
+    <br>
+    <span>2025年AI技术趋势全景回顾：从工具时代到伙伴时代的深刻变革</span>
+  </a>
+  <a class="next" href="https://yinbit.github.io/posts/first/">
+    <span class="title"> »</span>
+    <br>
+    <span>First</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on x"
+            href="https://x.com/intent/tweet/?text=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b&amp;url=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f&amp;hashtags=Redis%2cSpringBoot%2c%e7%bc%93%e5%ad%98%2c%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%2c%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f&amp;title=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b&amp;summary=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b&amp;source=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f&title=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on whatsapp"
+            href="https://api.whatsapp.com/send?text=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b%20-%20https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on telegram"
+            href="https://telegram.me/share/url?text=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b&amp;url=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Redis &#43; Spring Boot 最佳实践完整教程 on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Redis%20%2b%20Spring%20Boot%20%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5%e5%ae%8c%e6%95%b4%e6%95%99%e7%a8%8b&u=https%3a%2f%2fyinbit.github.io%2fposts%2fredis-springboot-best-practices%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://yinbit.github.io/">yinbitのblog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

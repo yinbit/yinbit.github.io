@@ -1,8 +1,7 @@
 baseURL = 'https://yinbit.github.io/'
-locale = 'en-us'
 title = 'yinbitのblog'
 theme = "PaperMod"
-
+defaultContentLanguage = "zh-cn"
 
 [params]
   defaultTheme = "auto"
@@ -14,30 +13,38 @@ theme = "PaperMod"
   ShowToc = true
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]  
-  
+  home = ["HTML", "RSS", "JSON"]
+
 [taxonomies]
   tag = "tags"
   category = "categories"
-  
-[[menu.main]]
+
+[languages.zh-cn]
+  title = "yinbitのblog"
+  languageName = "中文"
+  locale = "zh-cn"
+  weight = 1
+
+  [[languages.zh-cn.menu.main]]
   identifier = "archives"
-  name = "archive"
+  name = "归档"
   url = "/archives/"
   weight = 10
-[[menu.main]]
-  identifier = "search"
-  name = "search"
-  url = "/search/"
-  weight = 40
-[[menu.main]]
+
+  [[languages.zh-cn.menu.main]]
   identifier = "tags"
-  name = "tags"
+  name = "标签"
   url = "/tags/"
+  weight = 20
+
+  [[languages.zh-cn.menu.main]]
+  identifier = "search"
+  name = "搜索"
+  url = "/search/"
   weight = 30
-  
-[[menu.main]]
+
+  [[languages.zh-cn.menu.main]]
   identifier = "about"
-  name = "about"
+  name = "关于"
   url = "/about/"
-  weight = 100
+  weight = 40
