@@ -1,6 +1,6 @@
 baseURL = 'https://yinbit.github.io/'
 languageCode = 'zh-cn'
-title = 'Yinbit Blog'
+title = 'yinbit'
 theme = 'PaperMod'
 
 [menu]
@@ -27,7 +27,7 @@ theme = 'PaperMod'
 
 [params]
   description = '分享编程技巧和技术见解'
-  author = 'Yinbit'
+  author = 'yinbit'
   keywords = ['编程', '技术', '博客']
   showArchiveCount = true
   showReadingTime = true
