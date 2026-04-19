@@ -35,11 +35,11 @@ theme = 'PaperMod'
   showShareButtons = true
   defaultTheme = 'auto'
   ShowSearch = true
-  disableSectionMeta = true
-  disableBreadCrumbs = false
+  ShowCodeCopyButtons = true 
   sectionPagesMenu = ''
   showTOC = true
   TocOpen = true
+
 
 [outputs]
   home = ['HTML', 'RSS', 'JSON']
