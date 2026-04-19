@@ -1,23 +1,23 @@
 baseURL = 'https://yinbit.github.io/'
-locale = 'zh-cn'
+languageCode = 'zh-cn'
 title = 'Yinbit Blog'
 theme = 'PaperMod'
 
 [menu]
   [[menu.main]]
-    identifier = 'home'
-    name = '首页'
-    url = '/'
-    weight = 1
-  [[menu.main]]
     identifier = 'archives'
     name = '归档'
     url = '/archives/'
-    weight = 2
+    weight = 1
   [[menu.main]]
     identifier = 'tags'
     name = '标签'
     url = '/tags/'
+    weight = 2
+  [[menu.main]]
+    identifier = 'search'
+    name = '搜索'
+    url = '/search/'
     weight = 3
   [[menu.main]]
     identifier = 'about'
@@ -33,6 +33,12 @@ theme = 'PaperMod'
   showReadingTime = true
   showPostNavLinks = true
   showShareButtons = true
+  defaultTheme = 'auto'
+  ShowSearch = true
+
+[params.homeInfoParams]
+  Title = 'Yinbit Blog'
+  Content = '欢迎来到我的技术博客，分享编程技巧和技术见解'
 
 [outputs]
   home = ['HTML', 'RSS', 'JSON']
