@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Yinbit Blog</title><link>https://yinbit.github.io/posts/</link><description>Recent content in Posts on Yinbit Blog</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sun, 19 Apr 2026 16:08:11 +0800</lastBuildDate><atom:link href="https://yinbit.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>AI 新兴技术通俗解读：用生活中的比喻理解前沿概念</title><link>https://yinbit.github.io/posts/ai-emerging-technologies/</link><pubDate>Sun, 19 Apr 2026 16:08:11 +0800</pubDate><guid>https://yinbit.github.io/posts/ai-emerging-technologies/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on yinbit</title><link>https://yinbit.github.io/posts/</link><description>Recent content in Posts on yinbit</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sun, 19 Apr 2026 16:08:11 +0800</lastBuildDate><atom:link href="https://yinbit.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>AI 新兴技术通俗解读：用生活中的比喻理解前沿概念</title><link>https://yinbit.github.io/posts/ai-emerging-technologies/</link><pubDate>Sun, 19 Apr 2026 16:08:11 +0800</pubDate><guid>https://yinbit.github.io/posts/ai-emerging-technologies/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
 &lt;p&gt;AI 领域发展日新月异，各种新名词层出不穷。如果你觉得这些概念晦涩难懂，别担心，今天我们就用生活中的比喻，把这些&amp;quot;高大上&amp;quot;的技术词汇翻译成&amp;quot;人话&amp;quot;。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="1-大语言模型llm-读过万卷书的超级学霸"&gt;1. 大语言模型（LLM）—— 读过万卷书的&amp;quot;超级学霸&amp;quot;&lt;/h2&gt;
@@ -43,43 +43,4 @@
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="6-具身智能embodied-ai-有身体的-ai"&gt;6. 具身智能（Embodied AI）—— 有&amp;quot;身体&amp;quot;的 AI&lt;/h2&gt;
-&lt;p&gt;传统的 AI 存在于服务器里，只能通过屏幕与你交互。具身智能则是把 AI 装进机器人的&amp;quot;身体&amp;quot;里，让它能在物理世界中感知和行动。&lt;/p&gt;</description></item><item><title>Vibe Coding 编程技巧：如何让代码更有节奏感</title><link>https://yinbit.github.io/posts/vibe-coding/</link><pubDate>Sun, 19 Apr 2026 15:09:37 +0800</pubDate><guid>https://yinbit.github.io/posts/vibe-coding/</guid><description>&lt;h2 id="什么是-vibe-coding"&gt;什么是 Vibe Coding？&lt;/h2&gt;
-&lt;p&gt;Vibe Coding 是一种编程哲学，强调代码的可读性、节奏感和美学价值。它不仅仅是编写能工作的代码，更是创造一种让开发者感到愉悦的编码体验。&lt;/p&gt;
-&lt;h2 id="核心原则"&gt;核心原则&lt;/h2&gt;
-&lt;h3 id="1-代码的节奏感"&gt;1. 代码的节奏感&lt;/h3&gt;
-&lt;p&gt;好的代码应该有自然的节奏感，就像音乐一样。通过合理的缩进、空行和命名，让代码读起来流畅自然。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 不好的代码&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calculate_total_price&lt;/span&gt;(items):
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;total&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; item &lt;span style="color:#f92672"&gt;in&lt;/span&gt; items:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; item[&lt;span style="color:#e6db74"&gt;&amp;#39;price&amp;#39;&lt;/span&gt;]&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;total&lt;span style="color:#f92672"&gt;+=&lt;/span&gt;item[&lt;span style="color:#e6db74"&gt;&amp;#39;price&amp;#39;&lt;/span&gt;]&lt;span style="color:#f92672"&gt;*&lt;/span&gt;item[&lt;span style="color:#e6db74"&gt;&amp;#39;quantity&amp;#39;&lt;/span&gt;]
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; total
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 好的代码&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calculate_total_price&lt;/span&gt;(items):
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; total &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; item &lt;span style="color:#f92672"&gt;in&lt;/span&gt; items:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; item[&lt;span style="color:#e6db74"&gt;&amp;#39;price&amp;#39;&lt;/span&gt;] &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; total &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; item[&lt;span style="color:#e6db74"&gt;&amp;#39;price&amp;#39;&lt;/span&gt;] &lt;span style="color:#f92672"&gt;*&lt;/span&gt; item[&lt;span style="color:#e6db74"&gt;&amp;#39;quantity&amp;#39;&lt;/span&gt;]
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; total
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="2-命名的艺术"&gt;2. 命名的艺术&lt;/h3&gt;
-&lt;p&gt;变量和函数的命名应该清晰明了，能够准确表达其用途。避免使用晦涩的缩写和单个字母（除了循环变量）。&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 不好的命名
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calc&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 好的命名
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calculateSum&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;firstNumber&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;secondNumber&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;firstNumber&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;secondNumber&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-代码的模块化"&gt;3. 代码的模块化&lt;/h3&gt;
-&lt;p&gt;将代码分解成小的、可管理的模块，每个模块负责一个特定的功能。这样不仅提高了代码的可读性，也便于维护和测试。&lt;/p&gt;
-&lt;h3 id="4-注释的恰当使用"&gt;4. 注释的恰当使用&lt;/h3&gt;
-&lt;p&gt;注释应该解释代码的意图，而不是简单地重复代码的功能。好的注释能够帮助其他开发者（包括未来的自己）理解代码的设计思路。&lt;/p&gt;
-&lt;h3 id="5-错误处理的优雅"&gt;5. 错误处理的优雅&lt;/h3&gt;
-&lt;p&gt;错误处理应该优雅且全面，不仅要捕获错误，还要提供有意义的错误信息，便于调试和排查问题。&lt;/p&gt;
-&lt;h2 id="实践技巧"&gt;实践技巧&lt;/h2&gt;
-&lt;h3 id="1-使用一致的代码风格"&gt;1. 使用一致的代码风格&lt;/h3&gt;
-&lt;p&gt;选择一种代码风格（如 PEP 8 对于 Python，ESLint 对于 JavaScript）并严格遵守。一致性是 Vibe Coding 的关键。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;传统的 AI 存在于服务器里，只能通过屏幕与你交互。具身智能则是把 AI 装进机器人的&amp;quot;身体&amp;quot;里，让它能在物理世界中感知和行动。&lt;/p&gt;</description></item></channel></rss>
