@@ -39,6 +39,7 @@ theme = 'PaperMod'
   disableBreadCrumbs = false
   sectionPagesMenu = ''
   showTOC = true
+  TocOpen = true
   tocOpen = false
 
 [outputs]
