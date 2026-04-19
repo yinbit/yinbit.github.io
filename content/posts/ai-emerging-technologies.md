@@ -3,6 +3,9 @@ date = '2026-04-19T16:08:11+08:00'
 draft = false
 title = 'AI 新兴技术通俗解读：用生活中的比喻理解前沿概念'
 tags = ['AI', '人工智能', '大模型', '技术科普']
+cover:
+  image: "/images/12.png"
+  caption: "mod"
 +++
 
 ## 前言
