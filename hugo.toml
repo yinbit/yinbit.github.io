@@ -1,0 +1,4 @@
+baseURL = 'https://yinbit.github.io/'
+locale = 'zh-cn'
+title = 'Yinbit Blog'
+theme = 'PaperMod'
