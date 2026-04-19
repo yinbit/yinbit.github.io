@@ -1,0 +1,31 @@
+/* 宽屏下的侧边栏目录样式 */
+@media screen and (min-width: 1280px) {
+    .toc {
+        position: fixed;
+        left: calc((100% - var(--main-width) - var(--gap) * 2) / 2 - 250px);
+        /* 计算位置，放在正文左侧 */
+        top: 120px;
+        width: 200px;
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .toc details summary {
+        display: none;
+        /* 隐藏“目录”这两个字和折叠箭头 */
+    }
+
+    .toc .inner {
+        background: transparent;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+/* 适配暗黑模式 */
+.dark .toc {
+    color: rgba(255, 255, 255, 0.6);
+}
