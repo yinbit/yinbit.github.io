@@ -1,0 +1,45 @@
+/* 针对大屏幕的侧边粘性目录 - 靠右且整体上移版 */
+@media screen and (min-width: 1280px) {
+    /* 1. 设置文章主体为定位基准 */
+    .post-single {
+        position: relative;
+    }
+
+    /* 2. 核心：设置 TOC 的右侧粘性定位 */
+    .toc {
+        position: sticky;
+        /* 整体向上移动：通过较大的负 margin 实现初始位置上移 */
+        /* top 值决定了滚动到什么位置时“粘住” */
+        top: 20px; 
+        margin-top: -138px; 
+        
+        /* 定位在正文右侧 */
+        float: right;
+        /* 将目录向右侧推离正文边界 */
+        margin-right: -350px; 
+        width: 300px;
+        
+        border: none;
+        background: transparent;
+        z-index: 10;
+        visibility: visible;
+    }
+
+    /* 3. 隐藏 PaperMod 默认的“目录”按钮和折叠标题 */
+    .toc details summary {
+        display: none !important;
+    }
+
+    /* 4. 目录内部显示优化 */
+    .toc .inner {
+        padding: 0;
+        background: transparent;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    /* 隐藏滚动条 */
+    .toc .inner::-webkit-scrollbar {
+        width: 0px;
+    }
+}
