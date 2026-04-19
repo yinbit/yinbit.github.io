@@ -40,7 +40,6 @@ theme = 'PaperMod'
   sectionPagesMenu = ''
   showTOC = true
   TocOpen = true
-  tocOpen = false
 
 [outputs]
   home = ['HTML', 'RSS', 'JSON']
