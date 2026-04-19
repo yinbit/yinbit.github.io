@@ -2,3 +2,37 @@ baseURL = 'https://yinbit.github.io/'
 locale = 'zh-cn'
 title = 'Yinbit Blog'
 theme = 'PaperMod'
+
+[menu]
+  [[menu.main]]
+    identifier = 'home'
+    name = '首页'
+    url = '/'
+    weight = 1
+  [[menu.main]]
+    identifier = 'archives'
+    name = '归档'
+    url = '/archives/'
+    weight = 2
+  [[menu.main]]
+    identifier = 'tags'
+    name = '标签'
+    url = '/tags/'
+    weight = 3
+  [[menu.main]]
+    identifier = 'about'
+    name = '关于我'
+    url = '/about/'
+    weight = 4
+
+[params]
+  description = '分享编程技巧和技术见解'
+  author = 'Yinbit'
+  keywords = ['编程', '技术', '博客']
+  showArchiveCount = true
+  showReadingTime = true
+  showPostNavLinks = true
+  showShareButtons = true
+
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
