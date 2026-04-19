@@ -2,6 +2,11 @@
 date = '2026-04-19T15:47:53+08:00'
 draft = false
 title = '标签'
+[menu.main]
+  name = '标签'
+  identifier = 'tags'
+  url = '/tags/'
+  weight = 2
 +++
 
 ## 文章标签

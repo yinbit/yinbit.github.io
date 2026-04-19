@@ -35,10 +35,9 @@ theme = 'PaperMod'
   showShareButtons = true
   defaultTheme = 'auto'
   ShowSearch = true
-
-[params.homeInfoParams]
-  Title = 'Yinbit Blog'
-  Content = '欢迎来到我的技术博客，分享编程技巧和技术见解'
+  disableSectionMeta = true
+  disableBreadCrumbs = false
+  sectionPagesMenu = ''
 
 [outputs]
   home = ['HTML', 'RSS', 'JSON']
