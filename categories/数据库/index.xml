@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>数据库 on yinbit</title><link>https://yinbit.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link><description>Recent content in 数据库 on yinbit</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Fri, 03 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://yinbit.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL主从复制集群搭建与读写分离配置教程</title><link>https://yinbit.github.io/posts/mysql-master-slave-replication/</link><pubDate>Fri, 03 Apr 2026 00:00:00 +0000</pubDate><guid>https://yinbit.github.io/posts/mysql-master-slave-replication/</guid><description>&lt;h2 id="1-环境准备"&gt;1. 环境准备&lt;/h2&gt;
+&lt;h3 id="11-服务器规划"&gt;1.1 服务器规划&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;角色&lt;/th&gt;
+&lt;th&gt;IP地址&lt;/th&gt;
+&lt;th&gt;端口&lt;/th&gt;
+&lt;th&gt;服务器配置&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;主库 (Master)&lt;/td&gt;
+&lt;td&gt;192.168.1.10&lt;/td&gt;
+&lt;td&gt;3306&lt;/td&gt;
+&lt;td&gt;2核4G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;从库1 (Slave1)&lt;/td&gt;
+&lt;td&gt;192.168.1.11&lt;/td&gt;
+&lt;td&gt;3306&lt;/td&gt;
+&lt;td&gt;2核4G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;从库2 (Slave2)&lt;/td&gt;
+&lt;td&gt;192.168.1.12&lt;/td&gt;
+&lt;td&gt;3306&lt;/td&gt;
+&lt;td&gt;2核4G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;负载均衡 (ProxySQL)&lt;/td&gt;
+&lt;td&gt;192.168.1.13&lt;/td&gt;
+&lt;td&gt;6033&lt;/td&gt;
+&lt;td&gt;2核4G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="12-软件版本"&gt;1.2 软件版本&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;MySQL: 8.0.36&lt;/li&gt;
+&lt;li&gt;ProxySQL: 2.5.5&lt;/li&gt;
+&lt;li&gt;CentOS: 7.9&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-主库配置"&gt;2. 主库配置&lt;/h2&gt;
+&lt;h3 id="21-安装mysql"&gt;2.1 安装MySQL&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装MySQL 8.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;yum localinstall https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;yum install mysql-community-server -y
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 启动服务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl start mysqld
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl enable mysqld
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 获取初始密码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;grep &lt;span style="color:#e6db74"&gt;&amp;#39;temporary password&amp;#39;&lt;/span&gt; /var/log/mysqld.log
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 登录并修改密码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mysql -u root -p
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ALTER USER &lt;span style="color:#e6db74"&gt;&amp;#39;root&amp;#39;&lt;/span&gt;@&lt;span style="color:#e6db74"&gt;&amp;#39;localhost&amp;#39;&lt;/span&gt; IDENTIFIED BY &lt;span style="color:#e6db74"&gt;&amp;#39;YourStrongPassword123!&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-配置主库参数"&gt;2.2 配置主库参数&lt;/h3&gt;
+&lt;p&gt;编辑 &lt;code&gt;/etc/my.cnf&lt;/code&gt; 文件：&lt;/p&gt;</description></item></channel></rss>
