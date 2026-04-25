@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="400" height="350">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90d9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2e6cb5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c0392b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="400" height="350" fill="#f8f9fa"/>
+  
+  <!-- 标题 -->
+  <text x="200" y="30" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">人体心脏结构示意图</text>
+  
+  <!-- 心脏轮廓 -->
+  <path d="M200 80 
+           C 120 80, 80 140, 80 180 
+           C 80 240, 140 290, 200 320 
+           C 260 290, 320 240, 320 180 
+           C 320 140, 280 80, 200 80" 
+        fill="#fce4ec" stroke="#e91e63" stroke-width="3"/>
+  
+  <!-- 分隔线 - 上部 -->
+  <line x1="100" y1="140" x2="300" y2="140" stroke="#333" stroke-width="2"/>
+  
+  <!-- 分隔线 - 中间垂直 -->
+  <line x1="200" y1="100" x2="200" y2="280" stroke="#333" stroke-width="2"/>
+  
+  <!-- 右心房 (③) - 右上 -->
+  <ellipse cx="150" cy="120" rx="40" ry="25" fill="url(#blueGrad)" stroke="#1a5276" stroke-width="2"/>
+  <text x="150" y="125" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="white">③</text>
+  
+  <!-- 左心房 (①) - 左上 -->
+  <ellipse cx="250" cy="120" rx="40" ry="25" fill="url(#redGrad)" stroke="#922b21" stroke-width="2"/>
+  <text x="250" y="125" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="white">①</text>
+  
+  <!-- 右心室 (④) - 右下 -->
+  <ellipse cx="150" cy="210" rx="40" ry="50" fill="url(#blueGrad)" stroke="#1a5276" stroke-width="2"/>
+  <text x="150" y="215" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="white">④</text>
+  
+  <!-- 左心室 (②) - 左下 -->
+  <ellipse cx="250" cy="210" rx="40" ry="50" fill="url(#redGrad)" stroke="#922b21" stroke-width="2"/>
+  <text x="250" y="215" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="white">②</text>
+  
+  <!-- 箭头 - 血液流动方向 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#27ae60"/>
+    </marker>
+  </defs>
+  
+  <!-- 血流方向箭头 -->
+  <path d="M150 155 L150 165" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <path d="M200 280 L210 280" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <path d="M250 165 L250 155" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <path d="M190 100 L180 100" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowhead)"/>
+  
+  <!-- 图例 -->
+  <rect x="20" y="290" width="15" height="15" fill="url(#blueGrad)" stroke="#1a5276"/>
+  <text x="40" y="302" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">静脉血</text>
+  
+  <rect x="100" y="290" width="15" height="15" fill="url(#redGrad)" stroke="#922b21"/>
+  <text x="120" y="302" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">动脉血</text>
+  
+  <!-- 标注说明 -->
+  <text x="200" y="340" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="11" fill="#666">①左心房 ②左心室 ③右心房 ④右心室</text>
+</svg>
