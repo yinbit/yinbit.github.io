@@ -1,3 +1,6 @@
+---
+alwaysApply: false
+---
 ***
 
 alwaysApply: false

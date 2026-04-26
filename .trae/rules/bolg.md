@@ -1,6 +1,5 @@
 ---
 alwaysApply: false
-description: 写一篇博客或者文章
 ---
 ***
 
