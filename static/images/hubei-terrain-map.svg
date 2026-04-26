@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f9f9f9"/>
+  
+  <title>湖北省地形图</title>
+  
+  <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">湖北省地形示意图</text>
+  
+  <g transform="translate(50, 60)">
+    <rect x="0" y="0" width="700" height="450" fill="#e8f4f8" stroke="#333" stroke-width="1"/>
+    
+    <path d="M 150 80 L 200 70 L 280 60 L 350 65 L 420 70 L 500 80 L 560 100 L 600 130 L 620 180 L 630 230 L 620 280 L 600 330 L 560 370 L 500 400 L 420 420 L 350 430 L 280 420 L 200 400 L 150 370 L 110 330 L 80 280 L 70 230 L 80 180 L 110 130 L 150 100 Z" 
+          fill="#f5e6d3" stroke="#8B4513" stroke-width="2"/>
+    
+    <path d="M 100 150 L 150 140 L 200 145 L 250 140 L 300 150 L 350 145 L 400 155 L 450 150 L 500 160 L 540 180 L 560 210 L 550 250 L 520 290 L 480 320 L 420 340 L 350 350 L 280 340 L 220 310 L 180 270 L 160 230 L 170 190 L 190 160 Z" 
+          fill="#90EE90" opacity="0.4" stroke="#2ecc71" stroke-width="1.5"/>
+    <text x="330" y="250" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#27ae60">江汉平原</text>
+    
+    <path d="M 100 100 L 150 90 L 200 95 L 250 90 L 300 100 L 280 130 L 250 150 L 200 160 L 150 150 L 120 130 Z" 
+          fill="#D2691E" opacity="0.5" stroke="#8B4513" stroke-width="2"/>
+    <text x="200" y="125" font-family="Arial" font-size="11" font-weight="bold" text-anchor="middle" fill="#8B4513">秦岭</text>
+    
+    <path d="M 500 80 L 550 70 L 600 85 L 620 120 L 610 160 L 580 190 L 540 200 L 500 190 L 480 160 L 490 120 Z" 
+          fill="#A0522D" opacity="0.5" stroke="#8B4513" stroke-width="2"/>
+    <text x="550" y="140" font-family="Arial" font-size="11" font-weight="bold" text-anchor="middle" fill="#8B4513">大别山</text>
+    
+    <path d="M 80 200 L 120 190 L 160 200 L 180 240 L 170 280 L 140 310 L 100 300 L 80 270 L 70 240 Z" 
+          fill="#8B4513" opacity="0.4" stroke="#654321" stroke-width="2"/>
+    <text x="130" y="250" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#654321">武当山</text>
+    
+    <path d="M 550 300 L 600 290 L 650 310 L 670 350 L 650 390 L 600 400 L 560 380 L 540 340 Z" 
+          fill="#8B4513" opacity="0.4" stroke="#654321" stroke-width="2"/>
+    <text x="600" y="350" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#654321">幕阜山</text>
+    
+    <path d="M 100 200 L 150 210 L 200 200 L 250 210 L 300 200 L 350 210 L 400 200 L 450 210 L 500 200 L 550 210 L 600 200 L 650 210 L 680 220" 
+          fill="none" stroke="#4a90e2" stroke-width="4"/>
+    <text x="690" y="225" font-family="Arial" font-size="12" font-weight="bold" fill="#4a90e2">长江</text>
+    
+    <path d="M 200 180 L 250 190 L 300 185 L 350 195 L 400 190" 
+          fill="none" stroke="#3498db" stroke-width="2"/>
+    <text x="410" y="195" font-family="Arial" font-size="10" fill="#3498db">汉江</text>
+    
+    <ellipse cx="300" cy="280" rx="40" ry="25" fill="#87CEEB" opacity="0.6" stroke="#4682B4" stroke-width="1.5"/>
+    <text x="300" y="285" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#2c3e50">洪湖</text>
+    
+    <ellipse cx="380" cy="260" rx="35" ry="20" fill="#87CEEB" opacity="0.6" stroke="#4682B4" stroke-width="1.5"/>
+    <text x="380" y="265" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#2c3e50">梁子湖</text>
+    
+    <ellipse cx="450" cy="290" rx="30" ry="18" fill="#87CEEB" opacity="0.6" stroke="#4682B4" stroke-width="1.5"/>
+    <text x="450" y="295" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle" fill="#2c3e50">斧头湖</text>
+    
+    <circle cx="350" cy="220" r="12" fill="#e74c3c"/>
+    <text x="365" y="215" font-family="Arial" font-size="12" font-weight="bold" fill="#c0392b">武汉</text>
+    
+    <circle cx="280" cy="180" r="8" fill="#f39c12"/>
+    <text x="295" y="175" font-family="Arial" font-size="10" fill="#d68910">襄阳</text>
+    
+    <circle cx="420" cy="190" r="8" fill="#f39c12"/>
+    <text x="435" y="185" font-family="Arial" font-size="10" fill="#d68910">孝感</text>
+    
+    <circle cx="480" cy="240" r="8" fill="#f39c12"/>
+    <text x="495" y="235" font-family="Arial" font-size="10" fill="#d68910">黄石</text>
+    
+    <circle cx="250" cy="240" r="8" fill="#f39c12"/>
+    <text x="265" y="235" font-family="Arial" font-size="10" fill="#d68910">荆州</text>
+    
+    <circle cx="180" cy="280" r="8" fill="#f39c12"/>
+    <text x="195" y="275" font-family="Arial" font-size="10" fill="#d68910">宜昌</text>
+    
+    <circle cx="550" cy="200" r="8" fill="#f39c12"/>
+    <text x="565" y="195" font-family="Arial" font-size="10" fill="#d68910">黄冈</text>
+    
+    <circle cx="580" cy="260" r="8" fill="#f39c12"/>
+    <text x="595" y="255" font-family="Arial" font-size="10" fill="#d68910">咸宁</text>
+    
+    <circle cx="200" cy="150" r="8" fill="#f39c12"/>
+    <text x="215" y="145" font-family="Arial" font-size="10" fill="#d68910">十堰</text>
+    
+    <circle cx="450" cy="160" r="8" fill="#f39c12"/>
+    <text x="465" y="155" font-family="Arial" font-size="10" fill="#d68910">随州</text>
+    
+    <circle cx="150" cy="220" r="8" fill="#f39c12"/>
+    <text x="165" y="215" font-family="Arial" font-size="10" fill="#d68910">神农架</text>
+    
+    <path d="M 50 100 L 100 90 L 150 95 L 200 85 L 250 90" 
+          fill="none" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <text x="260" y="95" font-family="Arial" font-size="10" fill="#e74c3c">省界</text>
+  </g>
+  
+  <g transform="translate(50, 530)">
+    <text x="0" y="0" font-family="Arial" font-size="12" font-weight="bold" fill="#333">图例：</text>
+    
+    <rect x="50" y="-12" width="20" height="15" fill="#90EE90" opacity="0.4" stroke="#2ecc71" stroke-width="1"/>
+    <text x="75" y="0" font-family="Arial" font-size="10" fill="#333">平原</text>
+    
+    <rect x="130" y="-12" width="20" height="15" fill="#8B4513" opacity="0.4" stroke="#654321" stroke-width="1"/>
+    <text x="155" y="0" font-family="Arial" font-size="10" fill="#333">山地</text>
+    
+    <line x1="220" y1="-5" x2="250" y2="-5" stroke="#4a90e2" stroke-width="3"/>
+    <text x="255" y="0" font-family="Arial" font-size="10" fill="#333">长江</text>
+    
+    <ellipse cx="330" cy="-5" rx="10" ry="6" fill="#87CEEB" opacity="0.6" stroke="#4682B4" stroke-width="1"/>
+    <text x="345" y="0" font-family="Arial" font-size="10" fill="#333">湖泊</text>
+    
+    <circle cx="420" cy="-5" r="6" fill="#e74c3c"/>
+    <text x="430" y="0" font-family="Arial" font-size="10" fill="#333">省会</text>
+    
+    <circle cx="490" cy="-5" r="5" fill="#f39c12"/>
+    <text x="500" y="0" font-family="Arial" font-size="10" fill="#333">地级市</text>
+  </g>
+  
+  <text x="400" y="580" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">图7 湖北省地形示意图</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#f9f9f9"/>
+  
+  <title>六大板块分布示意图</title>
+  
+  <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">六大板块分布示意图</text>
+  
+  <g transform="translate(50, 60)">
+    <rect x="0" y="0" width="700" height="350" fill="#e8f4f8" stroke="#333" stroke-width="1"/>
+    
+    <path d="M 50 50 L 200 30 L 350 40 L 500 35 L 650 50 L 680 100 L 690 150 L 680 200 L 650 250 L 500 260 L 350 250 L 200 255 L 50 250 L 20 200 L 10 150 L 20 100 Z" 
+          fill="#e74c3c" opacity="0.4" stroke="#c0392b" stroke-width="2"/>
+    <text x="350" y="140" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#c0392b">亚欧板块</text>
+    
+    <path d="M 10 200 L 50 250 L 100 300 L 150 320 L 200 310 L 250 290 L 200 250 L 150 220 L 100 200 L 50 200 Z" 
+          fill="#3498db" opacity="0.4" stroke="#2980b9" stroke-width="2"/>
+    <text x="120" y="270" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#2980b9">非洲板块</text>
+    
+    <path d="M 550 200 L 600 180 L 650 200 L 690 250 L 680 300 L 650 340 L 600 350 L 550 340 L 520 300 L 530 250 Z" 
+          fill="#2ecc71" opacity="0.4" stroke="#27ae60" stroke-width="2"/>
+    <text x="600" y="280" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#27ae60">太平洋板块</text>
+    
+    <path d="M 250 290 L 300 310 L 350 320 L 400 310 L 450 290 L 500 300 L 520 340 L 480 350 L 400 340 L 300 340 L 250 320 Z" 
+          fill="#f39c12" opacity="0.4" stroke="#d68910" stroke-width="2"/>
+    <text x="380" y="320" font-family="Arial" font-size="11" font-weight="bold" text-anchor="middle" fill="#d68910">印度洋板块</text>
+    
+    <path d="M 500 260 L 550 250 L 600 240 L 650 250 L 680 200 L 690 150 L 680 100 L 650 80 L 600 90 L 550 100 L 500 120 L 480 160 L 490 200 L 500 240 Z" 
+          fill="#9b59b6" opacity="0.4" stroke="#8e44ad" stroke-width="2"/>
+    <text x="580" y="170" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#8e44ad">美洲板块</text>
+    
+    <path d="M 200 310 L 250 320 L 300 340 L 350 350 L 400 340 L 450 320 L 480 350 L 450 360 L 350 370 L 250 360 L 200 340 Z" 
+          fill="#1abc9c" opacity="0.4" stroke="#16a085" stroke-width="2"/>
+    <text x="340" y="355" font-family="Arial" font-size="11" font-weight="bold" text-anchor="middle" fill="#16a085">南极洲板块</text>
+    
+    <ellipse cx="280" cy="100" rx="30" ry="20" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+    <text x="280" y="105" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">土耳其</text>
+    
+    <path d="M 200 80 L 220 90 L 240 85 L 260 95 L 280 90 L 300 100 L 320 95" 
+          fill="none" stroke="#e74c3c" stroke-width="3" stroke-dasharray="5,3"/>
+    <text x="260" y="70" font-family="Arial" font-size="10" fill="#e74c3c">地震带</text>
+    
+    <circle cx="280" cy="100" r="40" fill="none" stroke="#e74c3c" stroke-width="2" stroke-dasharray="3,3"/>
+  </g>
+  
+  <g transform="translate(50, 430)">
+    <text x="0" y="0" font-family="Arial" font-size="12" font-weight="bold" fill="#333">图例：</text>
+    
+    <rect x="50" y="-12" width="20" height="15" fill="#e74c3c" opacity="0.4" stroke="#c0392b" stroke-width="1"/>
+    <text x="75" y="0" font-family="Arial" font-size="10" fill="#333">亚欧板块</text>
+    
+    <rect x="150" y="-12" width="20" height="15" fill="#3498db" opacity="0.4" stroke="#2980b9" stroke-width="1"/>
+    <text x="175" y="0" font-family="Arial" font-size="10" fill="#333">非洲板块</text>
+    
+    <rect x="250" y="-12" width="20" height="15" fill="#2ecc71" opacity="0.4" stroke="#27ae60" stroke-width="1"/>
+    <text x="275" y="0" font-family="Arial" font-size="10" fill="#333">太平洋板块</text>
+    
+    <rect x="360" y="-12" width="20" height="15" fill="#f39c12" opacity="0.4" stroke="#d68910" stroke-width="1"/>
+    <text x="385" y="0" font-family="Arial" font-size="10" fill="#333">印度洋板块</text>
+    
+    <rect x="470" y="-12" width="20" height="15" fill="#9b59b6" opacity="0.4" stroke="#8e44ad" stroke-width="1"/>
+    <text x="495" y="0" font-family="Arial" font-size="10" fill="#333">美洲板块</text>
+    
+    <rect x="570" y="-12" width="20" height="15" fill="#1abc9c" opacity="0.4" stroke="#16a085" stroke-width="1"/>
+    <text x="595" y="0" font-family="Arial" font-size="10" fill="#333">南极洲板块</text>
+  </g>
+  
+  <text x="400" y="480" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">图3 六大板块分布示意图</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#f9f9f9"/>
+  
+  <title>世界气候类型分布图</title>
+  
+  <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">世界气候类型分布简图</text>
+  
+  <g transform="translate(50, 60)">
+    <rect x="0" y="0" width="700" height="350" fill="#e8f4f8" stroke="#333" stroke-width="1"/>
+    
+    <line x1="0" y1="175" x2="700" y2="175" stroke="#e74c3c" stroke-width="2" stroke-dasharray="10,5"/>
+    <text x="710" y="180" font-family="Arial" font-size="12" fill="#e74c3c">赤道</text>
+    
+    <line x1="0" y1="100" x2="700" y2="100" stroke="#3498db" stroke-width="1" stroke-dasharray="5,5"/>
+    <text x="710" y="105" font-family="Arial" font-size="11" fill="#3498db">北回归线</text>
+    
+    <line x1="0" y1="250" x2="700" y2="250" stroke="#3498db" stroke-width="1" stroke-dasharray="5,5"/>
+    <text x="710" y="255" font-family="Arial" font-size="11" fill="#3498db">南回归线</text>
+    
+    <rect x="280" y="150" width="140" height="50" fill="#2ecc71" opacity="0.6"/>
+    <text x="350" y="180" font-family="Arial" font-size="10" text-anchor="middle" fill="#fff" font-weight="bold">热带雨林气候</text>
+    
+    <rect x="200" y="80" width="80" height="30" fill="#f39c12" opacity="0.6"/>
+    <text x="240" y="100" font-family="Arial" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">热带沙漠气候</text>
+    
+    <rect x="420" y="80" width="80" height="30" fill="#f39c12" opacity="0.6"/>
+    <text x="460" y="100" font-family="Arial" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">热带沙漠气候</text>
+    
+    <rect x="100" y="90" width="60" height="25" fill="#e67e22" opacity="0.6"/>
+    <text x="130" y="107" font-family="Arial" font-size="8" text-anchor="middle" fill="#fff" font-weight="bold">地中海气候</text>
+    
+    <rect x="50" y="110" width="70" height="30" fill="#3498db" opacity="0.6"/>
+    <text x="85" y="130" font-family="Arial" font-size="8" text-anchor="middle" fill="#fff" font-weight="bold">温带海洋性气候</text>
+    
+    <rect x="150" y="110" width="100" height="40" fill="#9b59b6" opacity="0.6"/>
+    <text x="200" y="135" font-family="Arial" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">温带季风气候</text>
+    
+    <rect x="450" y="110" width="100" height="40" fill="#9b59b6" opacity="0.6"/>
+    <text x="500" y="135" font-family="Arial" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">温带季风气候</text>
+    
+    <rect x="250" y="220" width="80" height="30" fill="#f39c12" opacity="0.6"/>
+    <text x="290" y="240" font-family="Arial" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">热带沙漠气候</text>
+    
+    <rect x="480" y="220" width="80" height="30" fill="#f39c12" opacity="0.6"/>
+    <text x="520" y="240" font-family="Arial" font-size="9" text-anchor="middle" fill="#fff" font-weight="bold">热带沙漠气候</text>
+    
+    <rect x="280" y="260" width="140" height="40" fill="#2ecc71" opacity="0.6"/>
+    <text x="350" y="285" font-family="Arial" font-size="10" text-anchor="middle" fill="#fff" font-weight="bold">热带雨林气候</text>
+    
+    <ellipse cx="350" cy="175" rx="25" ry="15" fill="#1abc9c" opacity="0.7"/>
+    <text x="350" y="180" font-family="Arial" font-size="8" text-anchor="middle" fill="#fff">刚果盆地</text>
+    
+    <ellipse cx="550" cy="200" rx="30" ry="20" fill="#1abc9c" opacity="0.7"/>
+    <text x="550" y="205" font-family="Arial" font-size="8" text-anchor="middle" fill="#fff">马来群岛</text>
+  </g>
+  
+  <g transform="translate(50, 430)">
+    <text x="0" y="0" font-family="Arial" font-size="12" font-weight="bold" fill="#333">图例：</text>
+    
+    <rect x="50" y="-12" width="20" height="15" fill="#2ecc71" opacity="0.6"/>
+    <text x="75" y="0" font-family="Arial" font-size="10" fill="#333">热带雨林气候</text>
+    
+    <rect x="170" y="-12" width="20" height="15" fill="#f39c12" opacity="0.6"/>
+    <text x="195" y="0" font-family="Arial" font-size="10" fill="#333">热带沙漠气候</text>
+    
+    <rect x="290" y="-12" width="20" height="15" fill="#e67e22" opacity="0.6"/>
+    <text x="315" y="0" font-family="Arial" font-size="10" fill="#333">地中海气候</text>
+    
+    <rect x="400" y="-12" width="20" height="15" fill="#3498db" opacity="0.6"/>
+    <text x="425" y="0" font-family="Arial" font-size="10" fill="#333">温带海洋性气候</text>
+    
+    <rect x="540" y="-12" width="20" height="15" fill="#9b59b6" opacity="0.6"/>
+    <text x="565" y="0" font-family="Arial" font-size="10" fill="#333">温带季风气候</text>
+  </g>
+  
+  <text x="400" y="480" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">图2 世界气候类型分布简图</text>
+</svg>
