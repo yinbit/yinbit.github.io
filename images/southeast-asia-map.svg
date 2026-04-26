@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550">
+  <rect width="800" height="550" fill="#f9f9f9"/>
+  
+  <title>东南亚地图</title>
+  
+  <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">东南亚地区示意图</text>
+  
+  <g transform="translate(50, 60)">
+    <rect x="0" y="0" width="700" height="400" fill="#e8f4f8" stroke="#333" stroke-width="1"/>
+    
+    <path d="M 100 50 L 150 60 L 200 55 L 250 70 L 300 60 L 350 75 L 400 65 L 450 80 L 500 70 L 550 85 L 600 75 L 650 90 L 680 120 L 690 160 L 680 200 L 650 230 L 600 250 L 550 240 L 500 260 L 450 250 L 400 270 L 350 260 L 300 280 L 250 270 L 200 290 L 150 280 L 100 300 L 80 260 L 60 220 L 50 180 L 60 140 L 80 100 Z" 
+          fill="#a8d5a2" stroke="#2e7d32" stroke-width="2"/>
+    
+    <path d="M 200 100 L 250 90 L 300 100 L 350 95 L 400 110 L 450 105 L 500 120 L 540 140 L 560 180 L 550 220 L 520 250 L 480 270 L 420 280 L 360 275 L 300 280 L 240 270 L 190 240 L 160 200 L 170 160 L 190 130 Z" 
+          fill="#c8e6c9" stroke="#43a047" stroke-width="1.5"/>
+    <text x="350" y="190" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1b5e20">中南半岛</text>
+    
+    <ellipse cx="550" cy="150" rx="40" ry="25" fill="#81c784" stroke="#388e3c" stroke-width="1.5"/>
+    <text x="550" y="155" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#1b5e20">菲律宾群岛</text>
+    
+    <ellipse cx="480" cy="220" rx="50" ry="30" fill="#81c784" stroke="#388e3c" stroke-width="1.5"/>
+    <text x="480" y="215" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#1b5e20">加里曼丹岛</text>
+    
+    <ellipse cx="580" cy="280" rx="35" ry="25" fill="#81c784" stroke="#388e3c" stroke-width="1.5"/>
+    <text x="580" y="285" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#1b5e20">苏拉威西岛</text>
+    
+    <ellipse cx="620" cy="340" rx="30" ry="20" fill="#81c784" stroke="#388e3c" stroke-width="1.5"/>
+    <text x="620" y="345" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#1b5e20">爪哇岛</text>
+    
+    <ellipse cx="580" cy="380" rx="25" ry="15" fill="#81c784" stroke="#388e3c" stroke-width="1.5"/>
+    <text x="580" y="385" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle" fill="#1b5e20">巴厘岛</text>
+    
+    <circle cx="250" cy="150" r="8" fill="#e74c3c"/>
+    <text x="265" y="145" font-family="Arial" font-size="11" font-weight="bold" fill="#c0392b">越南</text>
+    
+    <circle cx="300" cy="180" r="8" fill="#3498db"/>
+    <text x="315" y="175" font-family="Arial" font-size="11" font-weight="bold" fill="#2980b9">老挝</text>
+    
+    <circle cx="280" cy="220" r="8" fill="#f39c12"/>
+    <text x="295" y="215" font-family="Arial" font-size="11" font-weight="bold" fill="#d68910">柬埔寨</text>
+    
+    <circle cx="350" cy="240" r="8" fill="#9b59b6"/>
+    <text x="365" y="235" font-family="Arial" font-size="11" font-weight="bold" fill="#8e44ad">泰国</text>
+    
+    <circle cx="420" cy="250" r="8" fill="#2ecc71"/>
+    <text x="435" y="245" font-family="Arial" font-size="11" font-weight="bold" fill="#27ae60">缅甸</text>
+    
+    <circle cx="380" cy="300" r="8" fill="#e67e22"/>
+    <text x="395" y="295" font-family="Arial" font-size="11" font-weight="bold" fill="#d35400">马来西亚</text>
+    
+    <circle cx="420" cy="340" r="8" fill="#1abc9c"/>
+    <text x="435" y="335" font-family="Arial" font-size="11" font-weight="bold" fill="#16a085">新加坡</text>
+    
+    <circle cx="450" cy="380" r="8" fill="#34495e"/>
+    <text x="465" y="375" font-family="Arial" font-size="11" font-weight="bold" fill="#2c3e50">印度尼西亚</text>
+    
+    <path d="M 100 200 Q 150 190 200 200 Q 250 210 300 200 Q 350 190 400 200 Q 450 210 500 200" 
+          fill="none" stroke="#4a90e2" stroke-width="3"/>
+    <text x="520" y="205" font-family="Arial" font-size="11" fill="#4a90e2">北回归线</text>
+    
+    <line x1="350" y1="50" x2="350" y2="400" stroke="#e74c3c" stroke-width="2" stroke-dasharray="10,5"/>
+    <text x="360" y="70" font-family="Arial" font-size="11" fill="#e74c3c">赤道</text>
+    
+    <path d="M 150 120 L 200 140 L 250 130 L 300 150 L 350 140 L 400 160 L 450 150 L 500 170 L 550 160" 
+          fill="none" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="560" y="165" font-family="Arial" font-size="10" fill="#ff6b6b">中老铁路</text>
+  </g>
+  
+  <g transform="translate(50, 480)">
+    <text x="0" y="0" font-family="Arial" font-size="12" font-weight="bold" fill="#333">图例：</text>
+    
+    <rect x="50" y="-12" width="20" height="15" fill="#a8d5a2" stroke="#2e7d32" stroke-width="1"/>
+    <text x="75" y="0" font-family="Arial" font-size="10" fill="#333">陆地</text>
+    
+    <rect x="130" y="-12" width="20" height="15" fill="#e8f4f8" stroke="#333" stroke-width="1"/>
+    <text x="155" y="0" font-family="Arial" font-size="10" fill="#333">海洋</text>
+    
+    <line x1="220" y1="-5" x2="250" y2="-5" stroke="#4a90e2" stroke-width="2"/>
+    <text x="255" y="0" font-family="Arial" font-size="10" fill="#333">重要纬线</text>
+    
+    <line x1="340" y1="-5" x2="370" y2="-5" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="375" y="0" font-family="Arial" font-size="10" fill="#333">铁路</text>
+  </g>
+  
+  <text x="400" y="530" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">图5 东南亚地区示意图</text>
+</svg>

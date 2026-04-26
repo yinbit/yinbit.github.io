@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 550">
+  <rect width="800" height="550" fill="#f9f9f9"/>
+  
+  <title>中国农业分布示意图</title>
+  
+  <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333">中国农业分布示意图</text>
+  
+  <g transform="translate(50, 60)">
+    <path d="M 100 50 L 150 40 L 200 35 L 280 30 L 350 35 L 420 40 L 500 50 L 560 70 L 600 100 L 620 150 L 630 200 L 620 250 L 600 300 L 560 340 L 500 360 L 420 370 L 350 380 L 280 375 L 200 360 L 150 340 L 100 310 L 70 270 L 50 220 L 60 170 L 80 120 L 100 80 Z" 
+          fill="#f5e6d3" stroke="#8B4513" stroke-width="2"/>
+    
+    <path d="M 200 100 L 250 90 L 300 95 L 350 100 L 400 110 L 450 120 L 500 140 L 540 170 L 560 210 L 550 250 L 520 290 L 480 320 L 420 340 L 350 350 L 280 340 L 220 310 L 180 270 L 160 220 L 170 170 L 190 130 Z" 
+          fill="#90EE90" opacity="0.5" stroke="#2ecc71" stroke-width="1.5"/>
+    <text x="350" y="220" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#27ae60">东部种植业区</text>
+    
+    <path d="M 100 80 L 150 100 L 180 130 L 190 170 L 180 210 L 160 250 L 140 290 L 120 310 L 100 290 L 90 250 L 95 200 L 100 150 Z" 
+          fill="#98D8C8" opacity="0.5" stroke="#16a085" stroke-width="1.5"/>
+    <text x="140" y="200" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#16a085">西北</text>
+    <text x="140" y="215" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#16a085">畜牧业区</text>
+    
+    <path d="M 150 300 L 200 320 L 250 340 L 280 360 L 250 380 L 200 390 L 150 380 L 120 350 L 130 320 Z" 
+          fill="#F39C12" opacity="0.5" stroke="#d68910" stroke-width="1.5"/>
+    <text x="200" y="350" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#d68910">青藏</text>
+    <text x="200" y="365" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#d68910">畜牧业区</text>
+    
+    <ellipse cx="350" cy="150" rx="60" ry="30" fill="#FFD700" opacity="0.6" stroke="#FFA500" stroke-width="1.5"/>
+    <text x="350" y="145" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#8B4513">北方旱作农业</text>
+    <text x="350" y="158" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#8B4513">(小麦为主)</text>
+    
+    <ellipse cx="450" cy="250" rx="70" ry="35" fill="#87CEEB" opacity="0.6" stroke="#4682B4" stroke-width="1.5"/>
+    <text x="450" y="245" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#2c3e50">南方水田农业</text>
+    <text x="450" y="258" font-family="Arial" font-size="9" font-weight="bold" text-anchor="middle" fill="#2c3e50">(水稻为主)</text>
+    
+    <circle cx="520" cy="180" r="15" fill="#E74C3C" opacity="0.6" stroke="#C0392B" stroke-width="1.5"/>
+    <text x="520" y="184" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">东北</text>
+    
+    <circle cx="580" cy="250" r="15" fill="#9B59B6" opacity="0.6" stroke="#8E44AD" stroke-width="1.5"/>
+    <text x="580" y="254" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">华北</text>
+    
+    <circle cx="550" cy="320" r="15" fill="#3498DB" opacity="0.6" stroke="#2980B9" stroke-width="1.5"/>
+    <text x="550" y="324" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">华南</text>
+    
+    <line x1="350" y1="200" x2="350" y2="300" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="360" y="250" font-family="Arial" font-size="10" fill="#e74c3c">800mm等降水量线</text>
+    
+    <path d="M 300 180 Q 350 160 400 180 Q 450 200 500 180" fill="none" stroke="#3498db" stroke-width="2"/>
+    <text x="400" y="155" font-family="Arial" font-size="9" fill="#3498db">秦岭-淮河一线</text>
+  </g>
+  
+  <g transform="translate(50, 480)">
+    <text x="0" y="0" font-family="Arial" font-size="12" font-weight="bold" fill="#333">图例：</text>
+    
+    <rect x="50" y="-12" width="20" height="15" fill="#90EE90" opacity="0.5" stroke="#2ecc71" stroke-width="1"/>
+    <text x="75" y="0" font-family="Arial" font-size="10" fill="#333">东部种植业区</text>
+    
+    <rect x="180" y="-12" width="20" height="15" fill="#98D8C8" opacity="0.5" stroke="#16a085" stroke-width="1"/>
+    <text x="205" y="0" font-family="Arial" font-size="10" fill="#333">西北畜牧业区</text>
+    
+    <rect x="310" y="-12" width="20" height="15" fill="#F39C12" opacity="0.5" stroke="#d68910" stroke-width="1"/>
+    <text x="335" y="0" font-family="Arial" font-size="10" fill="#333">青藏畜牧业区</text>
+    
+    <line x1="440" y1="-5" x2="470" y2="-5" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="475" y="0" font-family="Arial" font-size="10" fill="#333">重要界线</text>
+  </g>
+  
+  <text x="400" y="530" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">图4 中国农业分布示意图</text>
+</svg>
